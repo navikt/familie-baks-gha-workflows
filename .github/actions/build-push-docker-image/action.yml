@@ -1,0 +1,16 @@
+name: "Build and push docker image"
+description: "Build and push docker image"
+inputs:
+  push-image:
+    required: false
+    description: "Push the docker image (true|false)"
+    default: "false"
+runs:
+  using: "composite"
+  steps:
+    - name: Build and push docker image
+      id: docker-push
+      uses: nais/docker-build-push@v0
+      with:
+        team: 'teamfamilie'
+        push_image: ${{ inputs.push-image }}

@@ -1,0 +1,35 @@
+name: Deploy
+on:
+  workflow_call:
+    inputs:
+      image:
+        required: true
+        type: string
+        description: 'Image tag to deploy (example 2023.03.10.080433-f821119)'
+      cluster:
+        required: true
+        type: string
+        description: 'The cluster to deploy to (dev-fss|dev-gcp|prod-fss|prod-gcp)'
+      nais_file_path:
+        required: true
+        type: string
+        description: 'The path to the nais (yaml) file to use'
+      runs-on:
+        required: false
+        type: string
+        description: Miljø versjon som skal brukes til bygg.
+        default: 'ubuntu-latest'
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ${{ inputs.runs-on }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy til ${{ inputs.cluster }} fra GAR
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          PRINT_PAYLOAD: true
+          CLUSTER: ${{ inputs.cluster }}
+          RESOURCE: ${{ inputs.nais_file_path }}
+          VAR: image=${{ inputs.image }}

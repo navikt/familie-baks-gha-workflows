@@ -1,0 +1,66 @@
+name: Build maven app
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+      java-version:
+        required: false
+        type: string
+        description: 'Which Java SDK version to build app.'
+        default: '21'
+      build-image:
+        required: false
+        type: boolean
+        description: 'Build docker image?'
+        default: true
+      push-image:
+        required: false
+        type: boolean
+        description: 'Push docker image?'
+        default: false
+    outputs:
+      build-version:
+        description: "Build version"
+        value: ${{ jobs.build-and-test.outputs.build-version }}
+jobs:
+  build-and-test:
+    name: Build and test
+    permissions:
+      contents: "read"
+      packages: "write"
+      id-token: "write"
+    runs-on: ${{ inputs.runs-on }}
+    env:
+      TZ: "Europe/Oslo"
+    outputs:
+      build-version: ${{ steps.build-and-test.outputs.build-version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # checkout gir shallow copy - fetch-depth: 0 vil tilgjengeliggjøre tags
+      - name: Setup java and maven
+        uses: navikt/familie-baks-gha-workflows/.github/actions/setup-java-and-maven@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          java-version: ${{ inputs.java-version }}
+      - name: Maven install and test
+        id: build-and-test
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-maven@main
+        env:
+          TESTCONTAINERS_REUSE_ENABLE: true
+      # TODO: Sonar analyse
+      - name: Bygg og push docker image
+        if: inputs.build-image
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main
+        with:
+          build-version: ${{ steps.build-and-test.outputs.build-version }}
+          push-image: ${{ inputs.push-image }}
+          namespace: 'teamfamilie'
+      - name: Clean up generated stuff before caching
+        run: |
+          rm ~/.m2/repository/no/nav/familie -r
