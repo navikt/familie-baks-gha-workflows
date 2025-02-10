@@ -10,7 +10,7 @@ on:
         required: true
         type: string
         description: 'The cluster to deploy to (dev-fss|dev-gcp|prod-fss|prod-gcp)'
-      nais_file_path:
+      nais-file-path:
         required: true
         type: string
         description: 'The path to the nais (yaml) file to use'
