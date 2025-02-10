@@ -44,7 +44,7 @@ jobs:
         with:
           fetch-depth: 0 # checkout gir shallow copy - fetch-depth: 0 vil tilgjengeliggjøre tags
       - name: Setup java and maven
-        uses: navikt/familie-baks-gha-workflows/.github/actions/setup-java-and-maven@main
+        uses: navikt/familie-baks-gha-workflows/.github/actions/setup-java-maven@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           java-version: ${{ inputs.java-version }}
