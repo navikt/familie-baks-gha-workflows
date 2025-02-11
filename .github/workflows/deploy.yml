@@ -31,5 +31,5 @@ jobs:
         env:
           PRINT_PAYLOAD: true
           CLUSTER: ${{ inputs.cluster }}
-          RESOURCE: ${{ inputs.nais_file_path }}
+          RESOURCE: ${{ inputs.nais-file-path }}
           VAR: image=${{ inputs.image }}
