@@ -23,12 +23,12 @@ on:
         description: 'Push docker image?'
         default: false
     outputs:
-      build-version:
-        description: "Build version"
-        value: ${{ jobs.build-and-test.outputs.build-version }}
+      image:
+        description: "Image name"
+        value: ${{ jobs.build-maven-app.outputs.image }}
 jobs:
-  build-and-test:
-    name: Build and test
+  build-maven-app:
+    name: Build maven app
     permissions:
       contents: "read"
       packages: "write"
@@ -37,7 +37,7 @@ jobs:
     env:
       TZ: "Europe/Oslo"
     outputs:
-      build-version: ${{ steps.build-and-test.outputs.build-version }}
+      image: ${{ steps.build-push-docker-image.outputs.image }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -48,13 +48,13 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           java-version: ${{ inputs.java-version }}
-      - name: Maven install and test
-        id: build-and-test
+      - name: Maven install
         uses: navikt/familie-baks-gha-workflows/.github/actions/build-maven@main
         env:
           TESTCONTAINERS_REUSE_ENABLE: true
       # TODO: Sonar analyse
       - name: Bygg og push docker image
+        id: build-push-docker-image
         if: inputs.build-image
         uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main
         with:
