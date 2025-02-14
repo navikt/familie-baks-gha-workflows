@@ -16,7 +16,7 @@ runs:
       with:
         repositories: '[{"id": "github", "name": "github", "url": "https://maven.pkg.github.com/navikt/familie-felles", "releases": { "enabled": "true" }, "snapshots": { "enabled": "false" }}]'
         servers: '[{ "id": "github", "username": "${{ github.actor }}", "password": "${{ inputs.github-token }}" }]'
-        output_file: 'settings.xml'
+        output_file: 'maven-settings.xml'
     - name: Set up JDK-${{ inputs.java-version }} with cache
       uses: actions/setup-java@v4
       with:
