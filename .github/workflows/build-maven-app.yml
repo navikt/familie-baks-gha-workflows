@@ -22,6 +22,11 @@ on:
         type: boolean
         description: 'Push docker image?'
         default: false
+      skip-tests:
+        description: 'Skip tests'
+        type: boolean
+        required: false
+        default: false
     outputs:
       image:
         description: "Image name"
@@ -52,6 +57,8 @@ jobs:
         uses: navikt/familie-baks-gha-workflows/.github/actions/build-maven@main
         env:
           TESTCONTAINERS_REUSE_ENABLE: true
+        with:
+          skip-tests: ${{ inputs.skip-tests }}
       # TODO: Sonar analyse
       - name: Bygg og push docker image
         id: build-push-docker-image
