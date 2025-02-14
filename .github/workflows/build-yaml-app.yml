@@ -1,0 +1,92 @@
+name: Build yaml app
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+      node-version:
+        required: false
+        type: string
+        description: 'Which Node version to build app.'
+        default: '20'
+      build-image:
+        required: false
+        type: boolean
+        description: 'Build docker image?'
+        default: true
+      push-image:
+        required: false
+        type: boolean
+        description: 'Push docker image?'
+        default: false
+      run-tests:
+        required: false
+        type: boolean
+        description: 'Run tests?'
+        default: true
+      run-validation:
+        required: false
+        type: boolean
+        description: 'Run validation? (eslint, prettier, typecheck)'
+        default: true
+    outputs:
+      image:
+        description: "Image name"
+        value: ${{ jobs.build-yarn-app.outputs.image }}
+jobs:
+  build-yarn-app:
+    name: Build yarn app
+    permissions:
+      contents: "read"
+      packages: "write"
+      id-token: "write"
+    runs-on: ${{ inputs.runs-on }}
+    env:
+      TZ: "Europe/Oslo"
+    outputs:
+      image: ${{ steps.build-push-docker-image.outputs.image }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # checkout gir shallow copy - fetch-depth: 0 vil tilgjengeliggjøre tags
+      - name: Set up Node with yarn
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: 'yarn'
+          registry-url: "https://npm.pkg.github.com"
+          cache-dependency-path: |
+            node_modules/.cache/nx
+            yarn.lock
+      - name: Yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_RELEASE: ${{ github.sha }}
+          BASE_PATH: ${{ env.BASE_PATH }}
+        run: |
+          yarn --prefer-offline --immutable
+      - name: Yarn build
+        run: yarn build
+      - name: Run eslint
+        if: ${{ inputs.run-validation }}
+        run: yarn eslint:changed
+      - name: Run prettier
+        if: ${{ inputs.run-validation }}
+        run: yarn prettier
+      - name: Run typecheck
+        if: ${{ inputs.run-validation }}
+        run: yarn typecheck
+      - name: Run tests
+        if: ${{ inputs.run-tests }}
+        run: yarn test
+      - name: Bygg og push docker image
+        id: build-push-docker-image
+        if: inputs.build-image
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main
+        with:
+          push-image: ${{ inputs.push-image }}
