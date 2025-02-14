@@ -72,9 +72,9 @@ jobs:
           yarn --prefer-offline --immutable
       - name: Yarn build
         run: yarn build
-      - name: Run eslint
+      - name: Run lint
         if: ${{ inputs.run-validation }}
-        run: yarn eslint:changed
+        run: yarn lint
       - name: Run prettier
         if: ${{ inputs.run-validation }}
         run: yarn prettier
