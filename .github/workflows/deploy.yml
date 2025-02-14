@@ -10,10 +10,10 @@ on:
         required: true
         type: string
         description: 'The cluster to deploy to (dev-fss|dev-gcp|prod-fss|prod-gcp)'
-      nais-file-path:
+      resource:
         required: true
         type: string
-        description: 'The path to the nais (yaml) file to use'
+        description: 'The path to the nais (yaml) resource file to use'
       runs-on:
         required: false
         type: string
@@ -31,5 +31,5 @@ jobs:
         env:
           PRINT_PAYLOAD: true
           CLUSTER: ${{ inputs.cluster }}
-          RESOURCE: ${{ inputs.nais-file-path }}
+          RESOURCE: ${{ inputs.resource }}
           VAR: image=${{ inputs.image }}
