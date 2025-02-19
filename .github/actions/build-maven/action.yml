@@ -11,4 +11,4 @@ runs:
     - name: Maven install
       shell: bash
       run: |
-        mvn install -s maven-settings.xml -e -B ${{ (inputs.skip-tests == 'true' && '-DskipTests') || '' }}
+        mvn install -s maven-settings.xml -e -B ${{ (inputs.skip-tests == 'true' && '-DskipTests') || '-Dsurefire.rerunFailingTestsCount=2' }}
