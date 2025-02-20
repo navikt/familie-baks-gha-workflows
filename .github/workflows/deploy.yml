@@ -20,6 +20,9 @@ on:
         description: Miljø versjon som skal brukes til bygg.
         default: 'ubuntu-latest'
 
+env:
+  VERSION: ${{ github.event.repository.name }}:${{ github.sha }}
+
 jobs:
   deploy:
     name: deploy
@@ -32,4 +35,4 @@ jobs:
           PRINT_PAYLOAD: true
           CLUSTER: ${{ inputs.cluster }}
           RESOURCE: ${{ inputs.resource }}
-          VAR: image=${{ inputs.image }}
+          VAR: image=${{ inputs.image }},VERSION=${{ env.VERSION }}
