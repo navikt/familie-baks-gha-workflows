@@ -22,15 +22,25 @@ on:
         type: boolean
         description: 'Push docker image?'
         default: false
+      base-path:
+        required: false
+        type: string
+        description: 'Base path for URLs'
+        default: '/'
       skip-tests:
         required: false
         type: boolean
         description: 'Run tests?'
-        default: true
+        default: false
       skip-validation:
         required: false
         type: boolean
         description: 'Run validation? (eslint, prettier, typecheck)'
+        default: false
+      skip-cypress:
+        required: false
+        type: boolean
+        description: 'Run cypress?'
         default: true
     outputs:
       image:
@@ -63,12 +73,12 @@ jobs:
       - name: Yarn install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: yarn --prefer-offline --immutable
+      - name: Yarn build
+        env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_RELEASE: ${{ github.sha }}
           BASE_PATH: ${{ env.BASE_PATH }}
-        run: |
-          yarn --prefer-offline --immutable
-      - name: Yarn build
         run: yarn build
       - name: Run lint
         if: ${{ !inputs.skip-validation }}
@@ -82,6 +92,9 @@ jobs:
       - name: Run tests
         if: ${{ !inputs.skip-tests }}
         run: yarn test
+      - name: Run cypress
+        if: ${{ !inputs.skip-cypress }}
+        run: yarn cypress
       - name: Bygg og push docker image
         id: build-push-docker-image
         if: inputs.build-image
