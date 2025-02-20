@@ -46,8 +46,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # checkout gir shallow copy - fetch-depth: 0 vil tilgjengeliggjøre tags
       - name: Setup java and maven
         uses: navikt/familie-baks-gha-workflows/.github/actions/setup-java-maven@main
         with:
