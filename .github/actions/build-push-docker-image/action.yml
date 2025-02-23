@@ -16,5 +16,6 @@ runs:
       id: docker-build-push
       uses: nais/docker-build-push@v0
       with:
+        pull: true
         team: 'teamfamilie'
         push_image: ${{ inputs.push-image }}
