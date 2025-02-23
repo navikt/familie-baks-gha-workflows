@@ -24,8 +24,8 @@ env:
   IMAGE_PATH: europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/${{ github.event.repository.name }}
 
 jobs:
-  deploy:
-    name: deploy
+  manual-deploy:
+    name: Manual deploy
     runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v4
