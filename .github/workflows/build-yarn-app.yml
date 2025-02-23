@@ -30,17 +30,17 @@ on:
       skip-tests:
         required: false
         type: boolean
-        description: 'Run tests?'
+        description: 'Skip tests?'
         default: false
       skip-validation:
         required: false
         type: boolean
-        description: 'Run validation? (eslint, prettier, typecheck)'
+        description: 'Skip validation? (eslint, prettier, typecheck)'
         default: false
       skip-cypress:
         required: false
         type: boolean
-        description: 'Run cypress?'
+        description: 'Skip cypress?'
         default: true
     outputs:
       image:

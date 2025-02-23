@@ -17,7 +17,7 @@ on:
       runs-on:
         required: false
         type: string
-        description: Miljø versjon som skal brukes til bygg.
+        description: 'Which runner image to run the workflow.'
         default: 'ubuntu-latest'
 
 env:
