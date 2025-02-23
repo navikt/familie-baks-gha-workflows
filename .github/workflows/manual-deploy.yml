@@ -2,10 +2,10 @@ name: Deploy
 on:
   workflow_call:
     inputs:
-      image:
+      image-tag:
         required: true
         type: string
-        description: 'Image to deploy (full path) example: europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/familie-ks-sak:2025.02.20-18.48-c123d9b'
+        description: 'Image tag to deploy (example 2025.02.20-18.48-c123d9b)'
       cluster:
         required: true
         type: string
@@ -20,6 +20,9 @@ on:
         description: 'Which runner image to run the workflow.'
         default: 'ubuntu-latest'
 
+env:
+  IMAGE_PATH: europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/${{ github.event.repository.name }}
+
 jobs:
   deploy:
     name: deploy
@@ -31,4 +34,4 @@ jobs:
         with:
           cluster: ${{ inputs.cluster }}
           resource: ${{ inputs.resource }}
-          image: ${{ inputs.image }}
+          image: ${{ env.IMAGE_PATH }}/${{ inputs.image }}

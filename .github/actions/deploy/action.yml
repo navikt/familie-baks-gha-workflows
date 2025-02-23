@@ -1,0 +1,26 @@
+name: Deploy image
+description: "deploy image"
+inputs:
+  image:
+    required: true
+    description: 'Image to deploy (full path) example: europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/familie-ks-sak:2025.02.20-18.48-c123d9b'
+  cluster:
+    required: true
+    description: 'The cluster to deploy to (dev-fss|dev-gcp|prod-fss|prod-gcp)'
+  resource:
+    required: true
+    description: 'The path to the nais (yaml) resource file to use'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set version
+      shell: bash
+      run: echo "VERSION=${{ github.event.repository.name }}:${{ github.sha }}" >> $GITHUB_ENV
+    - name: Deploy til ${{ inputs.cluster }} fra GAR
+      uses: nais/deploy/actions/deploy@v2
+      env:
+        PRINT_PAYLOAD: true
+        CLUSTER: ${{ inputs.cluster }}
+        RESOURCE: ${{ inputs.resource }}
+        VAR: image=${{ inputs.image }},VERSION=${{ env.VERSION }}
