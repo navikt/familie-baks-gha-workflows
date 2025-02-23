@@ -22,7 +22,7 @@ on:
 
 jobs:
   deploy:
-    name: deploy
+    name: Deploy
     runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v4
@@ -32,3 +32,14 @@ jobs:
           cluster: ${{ inputs.cluster }}
           resource: ${{ inputs.resource }}
           image: ${{ inputs.image }}
+  notify-failed-deploy:
+    name: Notify failed deploy
+    runs-on: ${{ inputs.runs-on }}
+    needs: [ deploy ]
+    if: failure()
+    steps:
+      - name: Post error in slack
+        run: |
+          curl -X POST --data "{\"text\": \"Deploy av $GITHUB_REPOSITORY feilet - $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}" $WEBHOOK_URL
+        env:
+          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
