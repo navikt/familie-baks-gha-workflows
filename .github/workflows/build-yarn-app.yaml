@@ -35,7 +35,7 @@ on:
       skip-validation:
         required: false
         type: boolean
-        description: 'Skip validation? (eslint, prettier, typecheck)'
+        description: 'Skip validation?'
         default: false
       skip-cypress:
         required: false
@@ -80,15 +80,9 @@ jobs:
           SENTRY_RELEASE: ${{ github.sha }}
           BASE_PATH: ${{ env.BASE_PATH }}
         run: yarn build
-      - name: Run lint
+      - name: Run validate
         if: ${{ !inputs.skip-validation }}
-        run: yarn lint
-      - name: Run prettier
-        if: ${{ !inputs.skip-validation }}
-        run: yarn prettier
-      - name: Run typecheck
-        if: ${{ !inputs.skip-validation }}
-        run: yarn typecheck
+        run: yarn validate
       - name: Run tests
         if: ${{ !inputs.skip-tests }}
         run: yarn test
