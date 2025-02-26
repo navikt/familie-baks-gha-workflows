@@ -34,7 +34,7 @@ on:
 jobs:
   build-maven-app:
     name: Build maven app
-    permissions:
+#    permissions:
 #      contents: "read" # docker-build-push
 #      packages: "write" # GH packages
 #      id-token: "write" # docker-build-push
