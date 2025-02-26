@@ -23,6 +23,8 @@ on:
 jobs:
   deploy:
     name: Deploy
+    permissions:
+      id-token: write
     runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v4
