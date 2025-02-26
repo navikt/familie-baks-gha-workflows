@@ -50,9 +50,8 @@ jobs:
   build-yarn-app:
     name: Build yarn app
     permissions:
-      contents: "read"
-      packages: "write"
-      id-token: "write"
+      contents: "read" # nais/docker-build-push
+      id-token: "write" # nais/docker-build-push
     runs-on: ${{ inputs.runs-on }}
     env:
       TZ: "Europe/Oslo"

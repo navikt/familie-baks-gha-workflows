@@ -35,9 +35,8 @@ jobs:
   build-maven-app:
     name: Build maven app
     permissions:
-      contents: "read"
-      packages: "write"
-      id-token: "write"
+      contents: "read" # docker-build-push
+      id-token: "write" # docker-build-push
     runs-on: ${{ inputs.runs-on }}
     env:
       TZ: "Europe/Oslo"
