@@ -35,9 +35,11 @@ jobs:
   build-maven-app:
     name: Build maven app
     permissions:
-      contents: "read"
-      packages: "write"
-      id-token: "write"
+      contents: "read" # docker-build-push
+#      packages: "write" # GH packages
+      id-token: "write" # docker-build-push
+#      contents: write # dep-submission
+#      security-events: write # push sarif to github security
     runs-on: ${{ inputs.runs-on }}
     env:
       TZ: "Europe/Oslo"
