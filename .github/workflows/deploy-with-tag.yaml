@@ -34,4 +34,4 @@ jobs:
         with:
           cluster: ${{ inputs.cluster }}
           resource: ${{ inputs.resource }}
-          image: ${{ env.IMAGE_PATH }}/${{ inputs.image-tag }}
+          image: ${{ env.IMAGE_PATH }}:${{ inputs.image-tag }}
