@@ -63,6 +63,3 @@ jobs:
         uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main
         with:
           push-image: ${{ inputs.push-image }}
-      - name: Clean up generated stuff before caching
-        run: |
-          rm ~/.m2/repository/no/nav/familie -r
