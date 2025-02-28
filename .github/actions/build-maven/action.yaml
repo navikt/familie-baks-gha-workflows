@@ -11,4 +11,12 @@ runs:
     - name: Maven install
       shell: bash
       run: |
-        mvn install -s maven-settings.xml -e -B ${{ (inputs.skip-tests == 'true' && '-DskipTests') || '-Dsurefire.rerunFailingTestsCount=2' }}
+        mvn install \
+          --settings maven-settings.xml \
+          --errors \
+          --batch-mode \
+          --no-transfer-progress \
+          -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
+          -Dmaven.wagon.http.pool=false \
+          -Dhttp.keepAlive=false \
+          ${{ (inputs.skip-tests == 'true' && '-DskipTests') || '-Dsurefire.rerunFailingTestsCount=2' }}
