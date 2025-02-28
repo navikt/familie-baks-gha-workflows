@@ -16,7 +16,4 @@ runs:
           --errors \
           --batch-mode \
           --no-transfer-progress \
-          -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
-          -Dmaven.wagon.http.pool=false \
-          -Dhttp.keepAlive=false \
           ${{ (inputs.skip-tests == 'true' && '-DskipTests') || '-Dsurefire.rerunFailingTestsCount=2' }}
