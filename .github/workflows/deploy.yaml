@@ -34,16 +34,14 @@ jobs:
           cluster: ${{ inputs.cluster }}
           resource: ${{ inputs.resource }}
           image: ${{ inputs.image }}
-
-# Avventer implementasjon av slack webhook
-#  notify-failed-deploy:
-#    name: Notify failed deploy
-#    runs-on: ${{ inputs.runs-on }}
-#    needs: [ deploy ]
-#    if: failure() && (inputs.cluster == 'prod-gcp' || inputs.cluster == 'prod-fss')
-#    steps:
-#      - name: Post error in slack
-#        run: |
-#          curl -X POST --data "{\"text\": \"Deploy av $GITHUB_REPOSITORY feilet - $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}" $WEBHOOK_URL
-#        env:
-#          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  notify-failed-deploy:
+    name: Notify failed deploy
+    runs-on: ${{ inputs.runs-on }}
+    needs: [ deploy ]
+    if: failure() && (inputs.cluster == 'prod-gcp' || inputs.cluster == 'prod-fss')
+    steps:
+      - name: Post error in slack
+        run: |
+          curl -X POST --data "{\"text\": \"Deploy av $GITHUB_REPOSITORY feilet - $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}" $WEBHOOK_URL
+        env:
+          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
