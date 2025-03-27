@@ -38,7 +38,7 @@ jobs:
     name: Notify failed deploy
     runs-on: ${{ inputs.runs-on }}
     needs: [ deploy ]
-    if: failure() && (inputs.cluster == 'prod-gcp' || inputs.cluster == 'prod-fss')
+    if: failure()
     steps:
       - name: Post error in slack
         run: |
