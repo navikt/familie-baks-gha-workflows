@@ -27,9 +27,9 @@ jobs:
       id-token: write # nais/deploy
     runs-on: ${{ inputs.runs-on }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
       - name: Deploy til ${{ inputs.cluster }} fra GAR
-        uses: navikt/familie-baks-gha-workflows/.github/actions/deploy@main
+        uses: navikt/familie-baks-gha-workflows/.github/actions/deploy@main # ratchet:exclude
         with:
           cluster: ${{ inputs.cluster }}
           resource: ${{ inputs.resource }}
