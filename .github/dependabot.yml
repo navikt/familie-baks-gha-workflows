@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    open-pull-requests-limit: 10
+    registries:
+      - github
+    groups:
+      minor-deps:
+        update-types:
+          - "minor"
+          - "patch"
+    directories:
+      - ".github/workflows"
+      - ".github/actions/build-maven"
+      - ".github/actions/build-push-docker-image"
+      - ".github/actions/deploy"
+      - ".github/actions/setup-java-maven"
