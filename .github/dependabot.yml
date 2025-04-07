@@ -14,14 +14,3 @@ updates:
         update-types:
           - "minor"
           - "patch"
-    directories:
-      - ".github/workflows"
-      - ".github/actions/build-maven"
-      - ".github/actions/build-push-docker-image"
-      - ".github/actions/deploy"
-      - ".github/actions/setup-java-maven"
-    ignore:
-      - "navikt/familie-baks-gha-workflows/.github/actions/build-maven"
-      - "navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image"
-      - "navikt/familie-baks-gha-workflows/.github/actions/deploy"
-      - "navikt/familie-baks-gha-workflows/.github/actions/setup-java-maven"
