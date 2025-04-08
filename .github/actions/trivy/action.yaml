@@ -3,10 +3,9 @@ description: 'Run Trivy vulnerability scanner and upload results'
 inputs:
   image:
     required: true
-    type: string
     description: 'Image to deploy (full path) example: europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/familie-ks-sak:2025.02.20-18.48-c123d9b'
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # ratchet:aquasecurity/trivy-action@v0.30
