@@ -1,5 +1,5 @@
 name: Deploy image
-description: "deploy image"
+description: 'deploy image'
 inputs:
   image:
     required: true
@@ -12,7 +12,7 @@ inputs:
     description: 'The path to the nais (yaml) resource file to use'
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Set version
       shell: bash

@@ -18,7 +18,7 @@ jobs:
     permissions:
       contents: write # to write sarif
       security-events: write # push sarif to github security
-      id-token: write # for nais/login
+      id-token: write # nais/login
     steps:
       - uses: actions/checkout@v4
       - uses: nais/login@v0

@@ -44,17 +44,17 @@ on:
         default: true
     outputs:
       image:
-        description: "Image name"
+        description: 'Image name'
         value: ${{ jobs.build-yarn-app.outputs.image }}
 jobs:
   build-yarn-app:
     name: Build yarn app
     permissions:
-      contents: "read" # nais/docker-build-push
-      id-token: "write" # nais/docker-build-push
+      contents: read # nais/docker-build-push
+      id-token: write # nais/docker-build-push
     runs-on: ${{ inputs.runs-on }}
     env:
-      TZ: "Europe/Oslo"
+      TZ: 'Europe/Oslo'
     outputs:
       image: ${{ steps.build-push-docker-image.outputs.image }}
     steps:
@@ -65,7 +65,7 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
           cache: 'yarn'
-          registry-url: "https://npm.pkg.github.com"
+          registry-url: 'https://npm.pkg.github.com'
           cache-dependency-path: |
             node_modules/.cache/nx
             yarn.lock
