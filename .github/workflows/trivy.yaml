@@ -1,0 +1,30 @@
+name: Trivy
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+      image:
+        required: true
+        type: string
+        description: 'Image to deploy (full path) example: europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/familie-ks-sak:2025.02.20-18.48-c123d9b'
+
+jobs:
+  trivy:
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: write # to write sarif
+      security-events: write # push sarif to github security
+      id-token: write # for nais/login
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nais/login@v0
+        with:
+          team: 'teamfamilie'
+      - name: Run Trivy vulnerability scanner and upload results
+        uses: navikt/familie-baks-gha-workflows/.github/actions/trivy@main # ratchet:exclude
+        with:
+          image: ${{ inputs.image }}
