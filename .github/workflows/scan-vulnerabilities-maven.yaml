@@ -1,0 +1,50 @@
+name: Scan vulnerabilities maven
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+      java-version:
+        required: false
+        type: string
+        description: 'Which Java SDK version to build app.'
+        default: '21'
+jobs:
+  scan-vulnerabilities:
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: write # to write sarif
+      security-events: write # push sarif to github security
+      id-token: write # nais/login
+    steps:
+      - uses: actions/checkout@v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # ratchet:github/codeql-action/init@v3
+        with:
+          languages: 'java-kotlin'
+      - name: Setup java and maven
+        uses: navikt/familie-baks-gha-workflows/.github/actions/setup-java-maven@main # ratchet:exclude
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          java-version: ${{ inputs.java-version }}
+      - name: Maven compile
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-maven@main # ratchet:exclude
+        with:
+          maven-command: 'compile'
+          skip-tests: true
+      - name: Build and push docker image
+        id: build-push-docker-image
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main # ratchet:exclude
+        with:
+          push-image: true
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # ratchet:github/codeql-action/analyze@v3
+        with:
+          category: '/language:java-kotlin'
+      - name: Run Trivy vulnerability scanner and upload results
+        uses: navikt/familie-baks-gha-workflows/.github/actions/trivy@main # ratchet:exclude
+        with:
+          image: ${{ step.build-push-docker-image.outputs.image }}
