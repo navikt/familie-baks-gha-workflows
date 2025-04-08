@@ -14,6 +14,8 @@ runs:
   steps:
     - name: Maven ${{ inputs.maven-command }}
       shell: bash
+      env:
+        MAVEN_OPTS: -Xss1024M -Xmx2048M
       run: |
         mvn ${{ inputs.maven-command }} \
           --settings maven-settings.xml \
