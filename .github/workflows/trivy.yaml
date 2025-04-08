@@ -7,10 +7,10 @@ on:
         type: string
         description: 'Which runner image to run the workflow.'
         default: 'ubuntu-latest'
-    image:
-      required: true
-      type: string
-      description: 'Image to deploy (full path) example: europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/familie-ks-sak:2025.02.20-18.48-c123d9b'
+      image:
+        required: true
+        type: string
+        description: 'Image to deploy (full path) example: europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/familie-ks-sak:2025.02.20-18.48-c123d9b'
 
 jobs:
   trivy:
