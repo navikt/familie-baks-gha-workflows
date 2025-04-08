@@ -88,7 +88,7 @@ jobs:
       - name: Run cypress
         if: ${{ !inputs.skip-cypress }}
         run: yarn cypress
-      - name: Bygg og push docker image
+      - name: Build and push docker image
         id: build-push-docker-image
         if: inputs.build-image
         uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main # ratchet:exclude
