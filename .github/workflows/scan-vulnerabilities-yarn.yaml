@@ -21,6 +21,7 @@ jobs:
       id-token: write # nais/login
     steps:
       - uses: actions/checkout@v4
+      # CodeQL scan
       - name: Initialize CodeQL
         uses: github/codeql-action/init@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # ratchet:github/codeql-action/init@v3
         with:
@@ -31,13 +32,14 @@ jobs:
           node-version: ${{ inputs.node-version }}
       - name: Yarn build
         run: yarn build
-      - name: Build docker image
-        id: build-docker-image
-        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main # ratchet:exclude
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # ratchet:github/codeql-action/analyze@v3
         with:
           category: '/language:javascript-typescript'
+      # Trivy scan
+      - name: Build docker image
+        id: build-docker-image
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main # ratchet:exclude
       - name: Run Trivy vulnerability scanner and upload results
         uses: navikt/familie-baks-gha-workflows/.github/actions/trivy@main # ratchet:exclude
         with:
