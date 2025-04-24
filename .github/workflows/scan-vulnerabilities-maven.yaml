@@ -32,7 +32,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           java-version: ${{ inputs.java-version }}
       - name: Maven compile
-        uses: navikt/familie-baks-gha-workflows/.github/actions/build-maven@main # ratchet:exclude
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-maven@scan-vulnerabilities # ratchet:exclude
         with:
           maven-command: 'clean package'
           skip-tests: true
@@ -43,7 +43,7 @@ jobs:
       # Trivy scan
       - name: Build docker image
         id: build-docker-image
-        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main # ratchet:exclude
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@scan-vulnerabilities # ratchet:exclude
       - name: Run Trivy vulnerability scanner and upload results
         uses: navikt/familie-baks-gha-workflows/.github/actions/trivy@main # ratchet:exclude
         with:
