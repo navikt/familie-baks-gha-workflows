@@ -35,11 +35,16 @@ jobs:
         with:
           maven-command: 'compile'
           skip-tests: true
-      - name: Build and push docker image
-        id: build-push-docker-image
-        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main # ratchet:exclude
-        with:
-          push-image: true
+#      - name: Build and push docker image
+#        id: build-push-docker-image
+#        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main # ratchet:exclude
+#        with:
+#          push-image: true
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build Docker image
+        run: |
+          docker build -t image-to-scan:latest .
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # ratchet:github/codeql-action/analyze@v3
         with:
@@ -47,4 +52,4 @@ jobs:
       - name: Run Trivy vulnerability scanner and upload results
         uses: navikt/familie-baks-gha-workflows/.github/actions/trivy@main # ratchet:exclude
         with:
-          image: ${{ steps.build-push-docker-image.outputs.image }}
+          image: image-to-scan:latest
