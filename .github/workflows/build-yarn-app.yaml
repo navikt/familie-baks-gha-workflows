@@ -64,6 +64,7 @@ jobs:
         uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-yarn@main # ratchet:exclude
         with:
           node-version: ${{ inputs.node-version }}
+          reader-token: ${{ secrets.READER_TOKEN }}
       - name: Yarn build
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}

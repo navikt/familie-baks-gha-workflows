@@ -5,6 +5,9 @@ inputs:
     required: false
     description: 'Which Node version to build app.'
     default: '20'
+  reader-token:
+    description: 'Token used to npm.pkg.github.com'
+    required: true
 runs:
   using: 'composite'
   steps:
@@ -20,5 +23,5 @@ runs:
     - name: Yarn install
       shell: bash
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ inputs.reader-token }}
       run: yarn --prefer-offline --immutable
