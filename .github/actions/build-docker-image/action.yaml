@@ -4,7 +4,7 @@ inputs:
   image-ref:
     required: true
     description: 'Combined image name and tag, i.e: local-image:ci'
-    default: 'local-image:ci'
+    default: ${{ github.event.repository.name }}
 outputs:
   image-ref:
     value: ${{ inputs.image-ref }}
