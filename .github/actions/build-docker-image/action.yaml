@@ -1,0 +1,19 @@
+name: 'Build docker image'
+description: 'Set up and builds docker image locally, for scanning purposes'
+inputs:
+  image-ref:
+    required: true
+    description: 'Combined image name and tag, i.e: local-image:ci'
+    default: ${{ github.event.repository.name }}
+outputs:
+  image-ref:
+    value: ${{ inputs.image-ref }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # ratchet:docker/setup-buildx-action@v3
+    - name: Build Docker image
+      shell: bash
+      run: |
+        docker build -t ${{ inputs.image-ref }} .

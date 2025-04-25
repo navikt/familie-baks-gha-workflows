@@ -1,6 +1,10 @@
-name: 'Maven install'
-description: 'Maven install'
+name: 'Build maven'
+description: 'Build maven with specified command'
 inputs:
+  maven-command:
+    description: 'What maven command to run'
+    required: false
+    default: 'install'
   skip-tests:
     description: 'Skip tests'
     required: false
@@ -8,10 +12,12 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Maven install
+    - name: Maven ${{ inputs.maven-command }}
       shell: bash
+      env:
+        MAVEN_OPTS: -Xss1024M -Xmx2048M
       run: |
-        mvn install \
+        mvn ${{ inputs.maven-command }} \
           --settings maven-settings.xml \
           --errors \
           --batch-mode \

@@ -1,4 +1,4 @@
-name: Build yaml app
+name: Build yarn app
 on:
   workflow_call:
     inputs:
@@ -60,19 +60,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
-      - name: Set up Node with yarn
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # ratchet:actions/setup-node@v4
+      - name: Set up node and install yarn packages
+        uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-yarn@main # ratchet:exclude
         with:
           node-version: ${{ inputs.node-version }}
-          cache: 'yarn'
-          registry-url: 'https://npm.pkg.github.com'
-          cache-dependency-path: |
-            node_modules/.cache/nx
-            yarn.lock
-      - name: Yarn install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-        run: yarn --prefer-offline --immutable
+          reader-token: ${{ secrets.READER_TOKEN }}
       - name: Yarn build
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -88,7 +80,7 @@ jobs:
       - name: Run cypress
         if: ${{ !inputs.skip-cypress }}
         run: yarn cypress
-      - name: Bygg og push docker image
+      - name: Build and push docker image
         id: build-push-docker-image
         if: inputs.build-image
         uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main # ratchet:exclude

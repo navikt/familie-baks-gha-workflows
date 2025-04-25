@@ -37,7 +37,7 @@ jobs:
   notify-failed-deploy:
     name: Notify failed deploy
     runs-on: ${{ inputs.runs-on }}
-    needs: [ deploy ]
+    needs: [deploy]
     if: failure()
     steps:
       - name: Post error in slack

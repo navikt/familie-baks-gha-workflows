@@ -1,0 +1,27 @@
+name: 'Setup Node and Yarn'
+description: 'Setup Node and Yarn for pipeline'
+inputs:
+  node-version:
+    required: false
+    description: 'Which Node version to build app.'
+    default: '20'
+  reader-token:
+    description: 'Token used to npm.pkg.github.com'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Node with yarn
+      uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # ratchet:actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'yarn'
+        registry-url: 'https://npm.pkg.github.com'
+        cache-dependency-path: |
+          node_modules/.cache/nx
+          yarn.lock
+    - name: Yarn install
+      shell: bash
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.reader-token }}
+      run: yarn --prefer-offline --immutable
