@@ -42,6 +42,6 @@ jobs:
     steps:
       - name: Post error in slack
         run: |
-          curl -X POST --data "{\"text\": \"Deploy av $GITHUB_REPOSITORY til prod har feilet - $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}" $WEBHOOK_URL
+          curl -X POST --data "{\"text\": \"Deploy av $GITHUB_REPOSITORY til ${{ inputs.cluster }} har feilet - $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}" $WEBHOOK_URL
         env:
           WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
