@@ -8,7 +8,6 @@ updates:
       time: "06:00"
     open-pull-requests-limit: 10
     groups:
-      minor-deps:
-        update-types:
-          - "minor"
-          - "patch"
+      workflows:
+        patterns:
+          - "*"
