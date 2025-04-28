@@ -31,6 +31,7 @@ on:
         description: 'Bring your own SBOM, required for nested dependencies in maven'
         type: string
         required: false
+        default: 'auto-generate-for-me-please.json' # This is the default value in nais/docker-build-push.
     outputs:
       image:
         description: 'Image name'
