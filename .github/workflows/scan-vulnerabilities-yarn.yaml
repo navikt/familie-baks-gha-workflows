@@ -12,19 +12,19 @@ on:
         type: string
         description: 'Which Node version to build app.'
         default: '20'
-strategy:
-  matrix:
-    include:
-      - language: javascript-typescript
-        build-mode: manual
-      - language: actions
-        build-mode: autobuild
 jobs:
   scan-vulnerabilities:
     runs-on: ${{ inputs.runs-on }}
     permissions:
       contents: write # to write sarif
       security-events: write # push sarif to github security
+    strategy:
+      matrix:
+        include:
+          - language: javascript-typescript
+            build-mode: manual
+          - language: actions
+            build-mode: autobuild
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
       # CodeQL scan
