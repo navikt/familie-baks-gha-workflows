@@ -25,7 +25,9 @@ jobs:
         uses: github/codeql-action/init@28deaeda66b76a05916b6923827895f2b14ab387 # ratchet:github/codeql-action/init@v3
         with:
           languages: 'java-kotlin'
-          source-root: 'src'
+          config: |
+            paths-ignore:
+              - target/
       - name: Setup java and maven
         uses: navikt/familie-baks-gha-workflows/.github/actions/setup-java-maven@main # ratchet:exclude
         with:
