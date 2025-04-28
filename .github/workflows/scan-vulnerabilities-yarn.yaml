@@ -12,6 +12,13 @@ on:
         type: string
         description: 'Which Node version to build app.'
         default: '20'
+strategy:
+  matrix:
+    include:
+      - language: javascript-typescript
+        build-mode: manual
+      - language: actions
+        build-mode: autobuild
 jobs:
   scan-vulnerabilities:
     runs-on: ${{ inputs.runs-on }}
@@ -24,7 +31,8 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@28deaeda66b76a05916b6923827895f2b14ab387 # ratchet:github/codeql-action/init@v3
         with:
-          languages: javascript-typescript, actions
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
           config: |
             paths-ignore:
               - node_modules/
