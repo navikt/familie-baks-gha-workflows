@@ -25,6 +25,7 @@ jobs:
         uses: github/codeql-action/init@28deaeda66b76a05916b6923827895f2b14ab387 # ratchet:github/codeql-action/init@v3
         with:
           languages: 'javascript-typescript'
+          source-root: 'src'
       - name: Set up node and install yarn packages
         uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-yarn@main # ratchet:exclude
         with:
