@@ -27,6 +27,10 @@ on:
         type: boolean
         required: false
         default: false
+      byosbom:
+        description: 'Bring your own SBOM, required for nested dependencies in maven'
+        type: string
+        required: false
     outputs:
       image:
         description: 'Image name'
@@ -60,6 +64,7 @@ jobs:
       - name: Build and push docker image
         id: build-push-docker-image
         if: inputs.build-image
-        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main # ratchet:exclude
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@byosbom # ratchet:exclude
         with:
           push-image: ${{ inputs.push-image }}
+          byosbom: ${{ inputs.byosbom }}
