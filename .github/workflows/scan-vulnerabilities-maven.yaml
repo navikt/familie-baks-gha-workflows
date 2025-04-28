@@ -40,8 +40,6 @@ jobs:
           skip-tests: true
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@28deaeda66b76a05916b6923827895f2b14ab387 # ratchet:github/codeql-action/analyze@v3
-        with:
-          category: '/language:java-kotlin'
       # Trivy scan
       - name: Build docker image
         id: build-docker-image
