@@ -7,9 +7,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: nais/login@e7cf2c159677dc7c7d599feff5f808f2bf59c7cf # ratchet:nais/login@v0
-      with:
-        team: 'teamfamilie'
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # ratchet:aquasecurity/trivy-action@v0.30
       env: # Workaround until fixed: https://github.com/aquasecurity/trivy-action/issues/389
