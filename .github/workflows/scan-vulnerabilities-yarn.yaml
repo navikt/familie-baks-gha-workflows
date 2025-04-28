@@ -24,7 +24,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@28deaeda66b76a05916b6923827895f2b14ab387 # ratchet:github/codeql-action/init@v3
         with:
-          languages: 'javascript-typescript', 'actions'
+          languages: javascript-typescript, actions
           config: |
             paths-ignore:
               - node_modules/
