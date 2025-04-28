@@ -24,8 +24,11 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@28deaeda66b76a05916b6923827895f2b14ab387 # ratchet:github/codeql-action/init@v3
         with:
-          languages: 'javascript-typescript'
-          source-root: 'src'
+          languages: javascript-typescript, actions
+          config: |
+            paths-ignore:
+              - node_modules/
+              - dist/
       - name: Set up node and install yarn packages
         uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-yarn@main # ratchet:exclude
         with:
@@ -35,8 +38,6 @@ jobs:
         run: yarn build
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@28deaeda66b76a05916b6923827895f2b14ab387 # ratchet:github/codeql-action/analyze@v3
-        with:
-          category: '/language:javascript-typescript'
       # Trivy scan
       - name: Build docker image
         id: build-docker-image
