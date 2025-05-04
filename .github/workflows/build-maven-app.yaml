@@ -61,7 +61,15 @@ jobs:
           TESTCONTAINERS_REUSE_ENABLE: true
         with:
           skip-tests: ${{ inputs.skip-tests }}
-      # TODO: Sonar analyse
+      # This check is actually required for the value to be passed along. The runner seems to "forget" the value if it is not used in a step.
+      - name: Check if byosbom exists
+        if: ${{ inputs.byosbom != '' }}
+        run: |
+          if [ -f "${{ inputs.byosbom }}" ]; then
+            echo "SBOM file exists"
+          else
+            echo "SBOM file not found"
+          fi
       - name: Build and push docker image
         id: build-push-docker-image
         if: inputs.build-image
