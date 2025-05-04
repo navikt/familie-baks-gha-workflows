@@ -61,14 +61,13 @@ jobs:
           TESTCONTAINERS_REUSE_ENABLE: true
         with:
           skip-tests: ${{ inputs.skip-tests }}
-      - name: Print SBOM file (if exists)
+      - name: Check if byosbom exists
         if: ${{ inputs.byosbom != '' }}
         run: |
           if [ -f "${{ inputs.byosbom }}" ]; then
-            echo "SBOM file exists at ${{ inputs.byosbom }}:"
-            head -n 10 "${{ inputs.byosbom }}"
+            echo "SBOM file exists"
           else
-            echo "SBOM file not found at path: ${{ inputs.byosbom }}"
+            echo "SBOM file not found"
           fi
       - name: Build and push docker image
         id: build-push-docker-image
