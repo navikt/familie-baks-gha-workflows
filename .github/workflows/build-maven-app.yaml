@@ -61,7 +61,19 @@ jobs:
           TESTCONTAINERS_REUSE_ENABLE: true
         with:
           skip-tests: ${{ inputs.skip-tests }}
-      # TODO: Sonar analyse
+      - name: Show working directory
+        run: pwd
+      - name: List files in working directory
+        run: ls
+      - name: Print SBOM file (if exists)
+        if: ${{ inputs.byosbom != '' }}
+        run: |
+          if [ -f "${{ inputs.byosbom }}" ]; then
+            echo "SBOM file exists at ${{ inputs.byosbom }}:"
+            head -n 20 "${{ inputs.byosbom }}"
+          else
+            echo "SBOM file not found at path: ${{ inputs.byosbom }}"
+          fi
       - name: Build and push docker image
         id: build-push-docker-image
         if: inputs.build-image
