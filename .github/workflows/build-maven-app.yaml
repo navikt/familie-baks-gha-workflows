@@ -65,8 +65,8 @@ jobs:
       - name: Check if byosbom exists
         if: ${{ inputs.byosbom != '' }}
         run: |
-          if [ -f "${{ inputs.byosbom }}" ]; then
-            echo "SBOM file exists"
+          if [ -s "${{ inputs.byosbom }}" ]; then
+            echo "SBOM file exists and has content"
           else
             echo "SBOM file not found"
           fi
