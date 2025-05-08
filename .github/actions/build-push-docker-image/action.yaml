@@ -24,3 +24,4 @@ runs:
         team: 'teamfamilie'
         push_image: ${{ inputs.push-image }}
         byosbom: ${{ inputs.byosbom }}
+        tag: ${{ github.ref == 'refs/heads/main' && 'latest' || '' }}
