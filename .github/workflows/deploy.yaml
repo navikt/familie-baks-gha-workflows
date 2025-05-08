@@ -27,6 +27,10 @@ jobs:
       id-token: write # nais/deploy
     runs-on: ${{ inputs.runs-on }}
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # ratchet:step-security/harden-runner@v2
+        with:
+          egress-policy: audit
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
       - name: Deploy to ${{ inputs.cluster }} from GAR
         uses: navikt/familie-baks-gha-workflows/.github/actions/deploy@main # ratchet:exclude
