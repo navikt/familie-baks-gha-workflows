@@ -1,4 +1,4 @@
-name: Pull request maven workflow
+name: Pull request maven
 on:
   workflow_call:
     inputs:
@@ -36,8 +36,8 @@ on:
         type: string
         default: ''
 jobs:
-  pull-request-maven-test-job:
-    name: Pull request maven test job
+  pull-request-maven:
+    name: Pull request maven
     permissions:
       contents: read
       id-token: write # TODO: Nødvendig?
