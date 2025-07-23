@@ -40,7 +40,7 @@ jobs:
     name: Pull request maven test job
     permissions:
       contents: read
-      id-token: write
+      id-token: write # TODO: Nødvendig?
     runs-on: ${{ inputs.runs-on }}
     env:
       TZ: 'Europe/Oslo'
@@ -65,8 +65,8 @@ jobs:
             --batch-mode \
             --no-transfer-progress \
             -Dsurefire.rerunFailingTestsCount=2 \
-            ${{ inputs.profile && format('-P{0} \\', inputs.profile) || '' }}
-            ${{ inputs.with-coverage && '-Pcoverage' || '' }}
+            ${{ inputs.profile && format('-P{0}', inputs.profile) || '' }} \
+            ${{ inputs.with-coverage && '-Pcoverage' || '' }} \
             ${{ inputs.maven-test-args }}
       - name: Upload code coverage report
         if: ${{ inputs.with-coverage }}
