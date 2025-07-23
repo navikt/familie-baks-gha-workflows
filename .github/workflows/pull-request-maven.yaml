@@ -1,0 +1,77 @@
+name: Pull request maven workflow
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+      java-version:
+        required: false
+        type: string
+        description: 'Which Java SDK version to build app.'
+        default: '21'
+      with_coverage:
+        required: false
+        type: boolean
+        description: 'Run tests with coverage'
+        default: false
+      profile:
+        required: false
+        type: string
+        description: 'Which maven profile to use for tests.'
+        default: 'TODO'
+      maven_custom_args:
+        required: false
+        type: string
+        description: 'Additional maven (-D) arguments to pass to the test command.'
+        default: ''
+      coverage_artifact_name:
+        required: false
+        type: string
+        default: ''
+      coverage_artifact_path:
+        required: false
+        type: string
+        default: ''
+jobs:
+  pull-request-maven-test-job:
+    name: Pull request maven test job
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ${{ inputs.runs-on }}
+    env:
+      TZ: 'Europe/Oslo'
+    outputs:
+      image: ${{ steps.build-push-docker-image.outputs.image }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      - name: Setup java and maven
+        uses: navikt/familie-baks-gha-workflows/.github/actions/setup-java-maven@main # ratchet:exclude
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          java-version: ${{ inputs.java-version }}
+      - name: Run test with profile ${{ inputs.profile }}
+        env:
+          # GITHUB_USERNAME: x-access-token # TODO: Nødvendig?
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mvn verify \
+            --settings maven-settings.xml \
+            --errors \
+            --batch-mode \
+            --no-transfer-progress \
+            -Dsurefire.rerunFailingTestsCount=2 \
+            ${{ inputs.profile && format('-P{0} \\', inputs.profile) || '' }}
+            ${{ inputs.maven_test_args }}
+      - name: Upload code coverage report
+        if: ${{ inputs.with_coverage }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # ratchet:actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.coverage_artifact_name }}
+          path: ${{ inputs.coverage_artifact_path }}
+          retention-days: 1
+          overwrite: true
