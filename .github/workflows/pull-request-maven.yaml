@@ -68,7 +68,7 @@ jobs:
             -Dsurefire.rerunFailingTestsCount=2 \
             ${{ inputs.profile && format('-P{0}', inputs.profile) || '' }} \
             ${{ inputs.with-coverage && '-Pcoverage' || '' }} \
-            ${{ inputs.maven-test-args }}
+            ${{ inputs.maven-custom-args }}
       - name: Upload code coverage report
         if: ${{ inputs.with-coverage }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # ratchet:actions/upload-artifact@v4
