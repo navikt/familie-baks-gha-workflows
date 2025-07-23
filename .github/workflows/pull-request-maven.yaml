@@ -12,7 +12,7 @@ on:
         type: string
         description: 'Which Java SDK version to build app.'
         default: '21'
-      with_coverage:
+      with_coverage: # Sets the maven profile "coverage" and uploads the coverage report
         required: false
         type: boolean
         description: 'Run tests with coverage'
@@ -21,7 +21,7 @@ on:
         required: false
         type: string
         description: 'Which maven profile to use for tests.'
-        default: 'TODO'
+        default: ''
       maven_custom_args:
         required: false
         type: string
@@ -66,6 +66,7 @@ jobs:
             --no-transfer-progress \
             -Dsurefire.rerunFailingTestsCount=2 \
             ${{ inputs.profile && format('-P{0} \\', inputs.profile) || '' }}
+            ${{ inputs.with_coverage && '-Pcoverage' || '' }}
             ${{ inputs.maven_test_args }}
       - name: Upload code coverage report
         if: ${{ inputs.with_coverage }}
