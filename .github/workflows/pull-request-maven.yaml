@@ -37,7 +37,7 @@ on:
         default: ''
 jobs:
   pull-request-maven:
-    name: Pull request maven
+    name: Pull request maven${{ inputs.profile && format(' - {0}', inputs.profile) || '' }}
     permissions:
       contents: read
       id-token: write # TODO: Nødvendig?
