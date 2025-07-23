@@ -12,7 +12,7 @@ on:
         type: string
         description: 'Which Java SDK version to build app.'
         default: '21'
-      with_coverage: # Sets the maven profile "coverage" and uploads the coverage report
+      with-coverage: # Sets the maven profile "coverage" and uploads the coverage report
         required: false
         type: boolean
         description: 'Run tests with coverage'
@@ -22,16 +22,16 @@ on:
         type: string
         description: 'Which maven profile to use for tests.'
         default: ''
-      maven_custom_args:
+      maven-custom-args:
         required: false
         type: string
         description: 'Additional maven (-D) arguments to pass to the test command.'
         default: ''
-      coverage_artifact_name:
+      coverage-artifact-name:
         required: false
         type: string
         default: ''
-      coverage_artifact_path:
+      coverage-artifact-path:
         required: false
         type: string
         default: ''
@@ -66,13 +66,13 @@ jobs:
             --no-transfer-progress \
             -Dsurefire.rerunFailingTestsCount=2 \
             ${{ inputs.profile && format('-P{0} \\', inputs.profile) || '' }}
-            ${{ inputs.with_coverage && '-Pcoverage' || '' }}
-            ${{ inputs.maven_test_args }}
+            ${{ inputs.with-coverage && '-Pcoverage' || '' }}
+            ${{ inputs.maven-test-args }}
       - name: Upload code coverage report
-        if: ${{ inputs.with_coverage }}
+        if: ${{ inputs.with-coverage }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # ratchet:actions/upload-artifact@v4
         with:
-          name: ${{ inputs.coverage_artifact_name }}
-          path: ${{ inputs.coverage_artifact_path }}
+          name: ${{ inputs.coverage-artifact-name }}
+          path: ${{ inputs.coverage-artifact-path }}
           retention-days: 1
           overwrite: true
