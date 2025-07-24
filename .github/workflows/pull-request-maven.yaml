@@ -40,7 +40,6 @@ jobs:
     name: Pull request maven${{ inputs.profile && format(' - {0}', inputs.profile) || '' }}
     permissions:
       contents: read
-      id-token: write # TODO: Nødvendig?
     runs-on: ${{ inputs.runs-on }}
     env:
       TZ: 'Europe/Oslo'
