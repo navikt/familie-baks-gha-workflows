@@ -65,6 +65,7 @@ jobs:
             --no-transfer-progress \
             --quiet \
             -Dsurefire.rerunFailingTestsCount=2 \
+            -Dmaven.artifact.threads=10 \
             ${{ inputs.profile && format('-P{0}', inputs.profile) || '' }} \
             ${{ inputs.with-coverage && '-Pcoverage' || '' }} \
             ${{ inputs.maven-custom-args }}
