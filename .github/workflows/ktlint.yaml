@@ -27,7 +27,6 @@ jobs:
           java-version: ${{ inputs.java-version }}
       - name: Run ktlint
         env:
-#          GITHUB_USERNAME: x-access-token # TODO: Nødvendig?
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn --batch-mode --no-transfer-progress antrun:run@ktlint
