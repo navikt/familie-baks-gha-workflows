@@ -12,29 +12,24 @@ on:
         type: string
         description: 'Which Java SDK version to build app.'
         default: '21'
-      with-coverage: # Sets the maven profile "coverage" and uploads the coverage report
+      with-coverage:
         required: false
         type: boolean
-        description: 'Run tests with coverage'
+        description: 'If true: sets the maven profile "coverage" and uploads the coverage report'
         default: false
       profile:
         required: false
         type: string
         description: 'Which maven profile to use for tests.'
         default: ''
-      maven-custom-args:
-        required: false
-        type: string
-        description: 'Additional maven (-D) arguments to pass to the test command.'
-        default: ''
       coverage-artifact-name:
         required: false
         type: string
-        default: ''
+        default: ${{ inputs.with-coverage && inputs.profile || ''}}
       coverage-artifact-path:
         required: false
         type: string
-        default: ''
+        default: ${{ inputs.with-coverage && format('coverage/{0}', inputs.profile) || '' }}
 jobs:
   pull-request-maven:
     name: Pull request maven${{ inputs.profile && format(' - {0}', inputs.profile) || '' }}
@@ -55,7 +50,6 @@ jobs:
           java-version: ${{ inputs.java-version }}
       - name: Run test with profile ${{ inputs.profile }}
         env:
-          # GITHUB_USERNAME: x-access-token # TODO: Nødvendig?
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn verify \
