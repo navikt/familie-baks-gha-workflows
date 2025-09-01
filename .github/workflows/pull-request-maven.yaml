@@ -48,7 +48,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           java-version: ${{ inputs.java-version }}
-      - name: Run test with profile ${{ inputs.profile }}
+      - name: Run tests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
