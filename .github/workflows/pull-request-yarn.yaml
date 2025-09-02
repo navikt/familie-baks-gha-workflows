@@ -21,8 +21,8 @@ jobs:
   pull-request-yarn:
     name: Pull request yarn
     permissions:
-      contents: read # nais/docker-build-push
-      id-token: write # nais/docker-build-push
+      contents: read # fetch repo
+      actions: write # cache
     runs-on: ${{ inputs.runs-on }}
     env:
       TZ: 'Europe/Oslo'
