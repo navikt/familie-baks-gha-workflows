@@ -4,7 +4,7 @@ inputs:
   node-version:
     required: false
     description: 'Which Node version to build app.'
-    default: '20'
+    default: '24'
   reader-token:
     description: 'Token used to npm.pkg.github.com'
     required: true
