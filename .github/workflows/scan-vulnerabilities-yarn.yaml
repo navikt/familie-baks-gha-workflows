@@ -42,6 +42,10 @@ jobs:
         run: yarn build
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@df559355d593797519d70b90fc8edd5db049e7a2 # ratchet:github/codeql-action/analyze@v3
+      - name: Logger inn med nais
+        uses: nais/login@v0
+        with:
+          team: teamfamilie
       # Trivy scan
       - name: Build docker image
         id: build-docker-image
