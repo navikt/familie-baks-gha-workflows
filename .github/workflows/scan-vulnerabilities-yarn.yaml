@@ -18,7 +18,7 @@ jobs:
     permissions:
       contents: write # to write sarif
       security-events: write # push sarif to github security
-      id-token: write # nais login
+      id-token: write # nais/login
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # ratchet:step-security/harden-runner@v2
