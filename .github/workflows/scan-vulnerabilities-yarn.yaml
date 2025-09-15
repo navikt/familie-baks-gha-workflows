@@ -18,12 +18,17 @@ jobs:
     permissions:
       contents: write # to write sarif
       security-events: write # push sarif to github security
+      id-token: write # nais/login
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # ratchet:step-security/harden-runner@v2
         with:
           egress-policy: audit
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # ratchet:actions/checkout@v4
+      - name: Logger inn med nais
+        uses: nais/login@v0
+        with:
+          team: teamfamilie
       # CodeQL scan
       - name: Initialize CodeQL
         uses: github/codeql-action/init@df559355d593797519d70b90fc8edd5db049e7a2 # ratchet:github/codeql-action/init@v3
