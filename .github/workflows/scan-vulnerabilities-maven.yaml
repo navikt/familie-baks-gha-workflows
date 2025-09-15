@@ -20,13 +20,13 @@ jobs:
       security-events: write # push sarif to github security
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # ratchet:step-security/harden-runner@v2
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # ratchet:step-security/harden-runner@v2
         with:
           egress-policy: audit
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # ratchet:actions/checkout@v4
       # CodeQL scan
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@df559355d593797519d70b90fc8edd5db049e7a2 # ratchet:github/codeql-action/init@v3
+        uses: github/codeql-action/init@192325c86100d080feab897ff886c34abd4c83a3 # ratchet:github/codeql-action/init@v3
         with:
           languages: java-kotlin, actions
           config: |
@@ -43,7 +43,7 @@ jobs:
           maven-command: 'clean package'
           skip-tests: true
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@df559355d593797519d70b90fc8edd5db049e7a2 # ratchet:github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@192325c86100d080feab897ff886c34abd4c83a3 # ratchet:github/codeql-action/analyze@v3
       # Trivy scan
       - name: Build docker image
         id: build-docker-image
