@@ -18,6 +18,7 @@ jobs:
     permissions:
       contents: write # to write sarif
       security-events: write # push sarif to github security
+      id-token: write
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # ratchet:step-security/harden-runner@v2
@@ -46,8 +47,6 @@ jobs:
         uses: nais/login@v0
         with:
           team: teamfamilie
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
       # Trivy scan
       - name: Build docker image
         id: build-docker-image
