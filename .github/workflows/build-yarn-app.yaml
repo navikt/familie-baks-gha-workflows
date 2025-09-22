@@ -11,7 +11,7 @@ on:
         required: false
         type: string
         description: 'Which Node version to build app.'
-        default: '20'
+        default: '24'
       build-image:
         required: false
         type: boolean
@@ -22,11 +22,6 @@ on:
         type: boolean
         description: 'Push docker image?'
         default: false
-      base-path:
-        required: false
-        type: string
-        description: 'Base path for URLs'
-        default: '/'
       skip-tests:
         required: false
         type: boolean
@@ -59,11 +54,11 @@ jobs:
       image: ${{ steps.build-push-docker-image.outputs.image }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863 # ratchet:step-security/harden-runner@v2
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # ratchet:step-security/harden-runner@v2
         with:
           egress-policy: audit
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # ratchet:actions/checkout@v4
       - name: Set up node and install yarn packages
         uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-yarn@main # ratchet:exclude
         with:
@@ -73,7 +68,6 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_RELEASE: ${{ github.sha }}
-          BASE_PATH: ${{ inputs.base-path }}
         run: yarn build
       - name: Run validate
         if: ${{ !inputs.skip-validation }}
