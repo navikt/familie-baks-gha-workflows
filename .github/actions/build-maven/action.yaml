@@ -31,6 +31,6 @@ runs:
           --batch-mode \
           --no-transfer-progress \
           --quiet \
-          ${{ (inputs.skip-tests == 'true' && '-DskipTests') || '-Dsurefire.rerunFailingTestsCount=2' }}
+          ${{ (inputs.skip-tests == 'true' && '-DskipTests') || '-Dsurefire.rerunFailingTestsCount=2' }} \
           ${{ inputs.profile && format('-P{0}', inputs.profile) || '' }} \
           ${{ inputs.with-coverage == 'true' && '-Pcoverage' || '' }} \
