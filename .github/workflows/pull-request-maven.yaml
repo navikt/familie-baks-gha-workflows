@@ -35,7 +35,6 @@ jobs:
     name: Pull request maven${{ inputs.profile && format(' - {0}', inputs.profile) || '' }}
     permissions:
       contents: read # fetch repo
-      actions: write # cache
     runs-on: ${{ inputs.runs-on }}
     env:
       TZ: 'Europe/Oslo'
