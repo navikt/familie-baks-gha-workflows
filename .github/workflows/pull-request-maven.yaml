@@ -50,7 +50,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           java-version: ${{ inputs.java-version }}
       - name: Maven verify
-        uses: navikt/familie-baks-gha-workflows/.github/actions/build-maven@pull-request # ratchet:exclude
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-maven@main # ratchet:exclude
         env:
           TESTCONTAINERS_REUSE_ENABLE: true
         with:
