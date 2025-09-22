@@ -1,0 +1,32 @@
+name: Run ktlint
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+      java-version:
+        required: false
+        type: string
+        description: 'Which Java SDK version to build app.'
+        default: '21'
+jobs:
+  ktlint:
+    name: Ktlint
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      - name: Setup java and maven
+        uses: navikt/familie-baks-gha-workflows/.github/actions/setup-java-maven@main # ratchet:exclude
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          java-version: ${{ inputs.java-version }}
+      - name: Run ktlint
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mvn --batch-mode --no-transfer-progress antrun:run@ktlint
