@@ -1,0 +1,47 @@
+name: Pull request yarn
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+      node-version:
+        required: false
+        type: string
+        description: 'Which Node version to build app.'
+        default: '20'
+      skip-cypress:
+        required: false
+        type: boolean
+        description: 'Skip cypress?'
+        default: true
+jobs:
+  pull-request-yarn:
+    name: Pull request yarn
+    permissions:
+      contents: read # fetch repo
+    runs-on: ${{ inputs.runs-on }}
+    env:
+      TZ: 'Europe/Oslo'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      - name: Set up node and install yarn packages
+        uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-yarn@main # ratchet:exclude
+        with:
+          node-version: ${{ inputs.node-version }}
+          reader-token: ${{ secrets.READER_TOKEN }}
+      - name: Yarn build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_RELEASE: ${{ github.sha }}
+        run: yarn build
+      - name: Run validate
+        run: yarn validate
+      - name: Run tests
+        run: yarn test
+      - name: Run cypress
+        if: ${{ inputs.skip-cypress }}
+        run: yarn cypress
