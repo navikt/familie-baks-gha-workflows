@@ -9,6 +9,14 @@ inputs:
     description: 'Skip tests'
     required: false
     default: 'false'
+  profile:
+    required: false
+    description: 'Which maven profile to use.'
+    default: ''
+  with-coverage:
+    required: false
+    description: 'If true: sets the maven profile "coverage" (-Pcoverage)'
+    default: 'false'
 runs:
   using: 'composite'
   steps:
@@ -22,4 +30,7 @@ runs:
           --errors \
           --batch-mode \
           --no-transfer-progress \
+          --quiet \
           ${{ (inputs.skip-tests == 'true' && '-DskipTests') || '-Dsurefire.rerunFailingTestsCount=2' }}
+          ${{ inputs.profile && format('-P{0}', inputs.profile) || '' }} \
+          ${{ inputs.with-coverage == 'true' && '-Pcoverage' || '' }} \
