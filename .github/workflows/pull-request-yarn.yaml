@@ -43,5 +43,5 @@ jobs:
       - name: Run tests
         run: yarn test
       - name: Run cypress
-        if: ${{ inputs.skip-cypress }}
+        if: ${{ !inputs.skip-cypress }}
         run: yarn cypress
