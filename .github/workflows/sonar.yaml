@@ -57,7 +57,7 @@ jobs:
           name: ${{ inputs.integration-test-artifact-name }}
           path: ${{ inputs.integration-test-artifact-path }}
       - name: Cache Sonar packages
-        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # ratchet:actions/cache@v4fsddssa
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # ratchet:actions/cache@v4fsddssa
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
