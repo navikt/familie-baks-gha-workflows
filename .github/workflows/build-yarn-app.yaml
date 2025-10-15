@@ -37,6 +37,11 @@ on:
         type: boolean
         description: 'Skip cypress?'
         default: true
+      build-profile:
+        required: false
+        type: string
+        description: 'Profile to build with. "yarn build:<profile>".'
+        default: ''
     outputs:
       image:
         description: 'Image name'
@@ -68,7 +73,12 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_RELEASE: ${{ github.sha }}
-        run: yarn build
+        run: |
+          if [ -z "${{ inputs.build-profile }}" ]; then
+            yarn build
+          else
+            yarn build:${{ inputs.build-profile }}
+          fi
       - name: Run validate
         if: ${{ !inputs.skip-validation }}
         run: yarn validate
