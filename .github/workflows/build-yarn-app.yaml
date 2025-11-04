@@ -91,6 +91,7 @@ jobs:
       - name: Build and push docker image
         id: build-push-docker-image
         if: inputs.build-image
-        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main # ratchet:exclude
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@bruk-build-profile-for-image-navn # ratchet:exclude
         with:
           push-image: ${{ inputs.push-image }}
+          image-suffix: ${{ inputs.build-profile }}
