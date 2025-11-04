@@ -9,6 +9,10 @@ inputs:
     required: false
     description: 'Bring your own SBOM, required for analyzing nested dependencies in maven'
     default: 'auto-generate-for-me-please.json' # This is the default value in nais/docker-build-push.
+  image-suffix:
+    required: false
+    description: 'Appends given value to the image name'
+    default: ''
 outputs:
   image:
     description: 'Image name'
@@ -24,3 +28,4 @@ runs:
         team: 'teamfamilie'
         push_image: ${{ inputs.push-image }}
         byosbom: ${{ inputs.byosbom }}
+        image_suffix: ${{ inputs.image-suffix }}
