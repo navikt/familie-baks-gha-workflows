@@ -81,3 +81,8 @@ jobs:
         with:
           push-image: ${{ inputs.push-image }}
           byosbom: ${{ inputs.byosbom }}
+      - name: Display image name
+        if: steps.build-push-docker-image.outputs.image != ''
+        run: |
+          echo "## Image name" >> $GITHUB_STEP_SUMMARY
+          echo "\`${{ steps.build-push-docker-image.outputs.image }}\`" >> $GITHUB_STEP_SUMMARY
