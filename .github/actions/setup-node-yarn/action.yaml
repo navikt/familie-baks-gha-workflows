@@ -24,4 +24,4 @@ runs:
       shell: bash
       env:
         NODE_AUTH_TOKEN: ${{ inputs.reader-token }}
-      run: yarn --prefer-offline --immutable
+      run: yarn --prefer-offline --immutable --ignore-scripts
