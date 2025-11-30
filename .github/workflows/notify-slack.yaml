@@ -1,0 +1,20 @@
+name: Notify slack
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+
+jobs:
+  notify-slack:
+    name: Notify slack
+    runs-on: ${{ inputs.runs-on }}
+    steps:
+      - name: Post error in slack
+        run: |
+          curl -X POST --data "{\"text\": \"Workflow: $GITHUB_WORKFLOW/$GITHUB_JOB/$GITHUB_ACTION feilet for $GITHUB_REPOSITORY - $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}" $WEBHOOK_URL
+        env:
+          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
