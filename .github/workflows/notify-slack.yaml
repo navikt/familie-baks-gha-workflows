@@ -15,6 +15,6 @@ jobs:
     steps:
       - name: Post error in slack
         run: |
-          curl -X POST --data "{\"text\": \"Workflow: $GITHUB_WORKFLOW/$GITHUB_JOB/$GITHUB_ACTION feilet for $GITHUB_REPOSITORY - $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}" $WEBHOOK_URL
+          curl -X POST --data "{\"text\": \"Workflow: $GITHUB_WORKFLOW feilet for $GITHUB_REPOSITORY - $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}" $WEBHOOK_URL
         env:
           WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
