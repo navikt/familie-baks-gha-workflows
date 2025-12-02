@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # ratchet:actions/checkout@v4
       # CodeQL scan
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@e12f0178983d466f2f6028f5cc7a6d786fd97f4b # ratchet:github/codeql-action/init@v3
+        uses: github/codeql-action/init@fdbfb4d2750291e159f0156def62b853c2798ca2 # ratchet:github/codeql-action/init@v3
         with:
           languages: java-kotlin, actions
           config: |
@@ -43,7 +43,7 @@ jobs:
           maven-command: 'clean package'
           skip-tests: true
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@e12f0178983d466f2f6028f5cc7a6d786fd97f4b # ratchet:github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@fdbfb4d2750291e159f0156def62b853c2798ca2 # ratchet:github/codeql-action/analyze@v3
       # Trivy scan
       - name: Build docker image
         id: build-docker-image
