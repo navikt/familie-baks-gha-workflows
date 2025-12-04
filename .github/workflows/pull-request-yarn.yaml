@@ -17,6 +17,11 @@ on:
         type: boolean
         description: 'Skip cypress?'
         default: true
+    secrets:
+      READER_TOKEN:
+        required: false
+      SENTRY_AUTH_TOKEN:
+        required: false
 jobs:
   pull-request-yarn:
     name: Pull request yarn

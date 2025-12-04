@@ -32,6 +32,9 @@ on:
         required: false
         type: string
         default: 'coverage/integrasjonstest'
+    secrets:
+      SONAR_TOKEN:
+        required: true
 jobs:
   sonar:
     if: github.actor != 'dependabot[bot]' && github.event_name != 'merge_group'
