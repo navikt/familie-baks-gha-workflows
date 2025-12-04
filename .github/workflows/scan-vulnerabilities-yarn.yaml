@@ -12,6 +12,9 @@ on:
         type: string
         description: 'Which Node version to build app.'
         default: '24'
+    secrets:
+      READER_TOKEN:
+        required: false
 jobs:
   scan-vulnerabilities:
     runs-on: ${{ inputs.runs-on }}
