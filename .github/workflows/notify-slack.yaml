@@ -7,11 +7,15 @@ on:
         type: string
         description: 'Which runner image to run the workflow.'
         default: 'ubuntu-latest'
+    secrets:
+      SLACK_WEBHOOK_URL:
+        required: true
 
 jobs:
   notify-slack:
     name: Notify slack
     runs-on: ${{ inputs.runs-on }}
+    permissions: {}
     steps:
       - name: Post error in slack
         run: |
