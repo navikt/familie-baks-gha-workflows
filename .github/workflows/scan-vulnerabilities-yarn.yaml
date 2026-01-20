@@ -41,6 +41,9 @@ jobs:
             paths-ignore:
               - node_modules/
               - dist/
+              - dist_frontend/
+              - dist_backend/
+              - frontend_production/
       - name: Set up node and install yarn packages
         uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-yarn@main # ratchet:exclude
         with:
