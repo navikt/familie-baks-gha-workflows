@@ -32,7 +32,7 @@ jobs:
       TZ: 'Europe/Oslo'
     steps:
       - name: Checkout code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # ratchet:actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # ratchet:actions/checkout@v4
       - name: Set up node and install yarn packages
         uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-yarn@main # ratchet:exclude
         with:
