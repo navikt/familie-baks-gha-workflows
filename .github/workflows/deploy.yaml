@@ -24,6 +24,7 @@ jobs:
   deploy:
     name: Deploy
     permissions:
+      contents: read
       id-token: write # nais/deploy
     runs-on: ${{ inputs.runs-on }}
     steps:
