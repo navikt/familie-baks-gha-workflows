@@ -1,0 +1,28 @@
+name: Digestabot updates
+
+on:
+  workflow_call:
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+
+jobs:
+  digestabot-updates:
+    name: Digestabot updates
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to push the updates
+      pull-requests: write # to open Pull requests
+      id-token: write # used to sign the commits using gitsign
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # ratchet:actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: navikt/digestabot@e4b413f1eed3c97f7fd4ffa1d05204de9944d0a9 # ratchet:navikt/digestabot@v1.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          team: teamfamilie
+          branch-for-pr: 'digestabot'
+          commit-message: 'Bump Docker image (digestabot)'
+          title-for-pr: 'Bump Docker image (digestabot)'
+          description-for-pr: 'Bumper Chainguard Docker image til nyeste tilgjengelige versjon.'
