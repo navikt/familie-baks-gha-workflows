@@ -54,6 +54,6 @@ jobs:
         id: build-docker-image
         uses: navikt/familie-baks-gha-workflows/.github/actions/build-docker-image@main # ratchet:exclude
       - name: Run Trivy vulnerability scanner and upload results
-        uses: navikt/familie-baks-gha-workflows/.github/actions/trivy@main # ratchet:exclude
+        uses: navikt/familie-baks-gha-workflows/.github/actions/trivy@bump-trivy # ratchet:exclude
         with:
           image: ${{ steps.build-docker-image.outputs.image-ref }}
