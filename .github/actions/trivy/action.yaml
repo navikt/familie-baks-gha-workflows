@@ -8,7 +8,7 @@ runs:
   using: 'composite'
   steps:
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # ratchet:aquasecurity/trivy-action@v0.30
+      uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # ratchet:aquasecurity/trivy-action@0.35.0
       env: # Workaround until fixed: https://github.com/aquasecurity/trivy-action/issues/389
         TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db,aquasec/trivy-db,ghcr.io/aquasecurity/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db,aquasec/trivy-java-db,ghcr.io/aquasecurity/trivy-java-db
@@ -19,6 +19,6 @@ runs:
         severity: 'HIGH,CRITICAL'
         limit-severities-for-sarif: true
     - name: Upload results to GitHub Security
-      uses: github/codeql-action/upload-sarif@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # ratchet:github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # ratchet:github/codeql-action/upload-sarif@v4
       with:
         sarif_file: 'trivy.sarif'
