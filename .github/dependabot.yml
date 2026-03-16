@@ -3,7 +3,9 @@ updates:
   - package-ecosystem: github-actions
     assignees:
       - GardOS
-    directory: "/"
+    directories:
+      - "/"
+      - "/.github/actions"
     schedule:
       interval: weekly
       day: monday
