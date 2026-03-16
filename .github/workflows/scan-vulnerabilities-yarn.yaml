@@ -24,17 +24,17 @@ jobs:
       id-token: write # nais/login
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b # ratchet:step-security/harden-runner@v2
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # ratchet:step-security/harden-runner@v2
         with:
           egress-policy: audit
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # ratchet:actions/checkout@v6
       - name: Nais login
-        uses: nais/login@e7cf2c159677dc7c7d599feff5f808f2bf59c7cf # ratchet:nais/login@v0
+        uses: nais/login@c88ada9ce583928e1c84d2fd5c45cfacdd18d5de # ratchet:nais/login@v0
         with:
           team: teamfamilie
       # CodeQL scan
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@b20883b0cd1f46c72ae0ba6d1090936928f9fa30 # ratchet:github/codeql-action/init@v4
+        uses: github/codeql-action/init@0d579ffd059c29b07949a3cce3983f0780820c98 # ratchet:github/codeql-action/init@v4
         with:
           languages: javascript-typescript, actions
           config: |
@@ -52,7 +52,7 @@ jobs:
       - name: Yarn build
         run: yarn build
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@b20883b0cd1f46c72ae0ba6d1090936928f9fa30 # ratchet:github/codeql-action/analyze@v4
+        uses: github/codeql-action/analyze@0d579ffd059c29b07949a3cce3983f0780820c98 # ratchet:github/codeql-action/analyze@v4
       # Trivy scan
       - name: Build docker image
         id: build-docker-image
