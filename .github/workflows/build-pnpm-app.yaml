@@ -1,0 +1,107 @@
+name: Build pnpm app
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+      node-version:
+        required: true
+        type: string
+        description: 'Which Node version to build app.'
+      build-image:
+        required: false
+        type: boolean
+        description: 'Build docker image?'
+        default: true
+      push-image:
+        required: false
+        type: boolean
+        description: 'Push docker image?'
+        default: false
+      skip-tests:
+        required: false
+        type: boolean
+        description: 'Skip tests?'
+        default: false
+      skip-validation:
+        required: false
+        type: boolean
+        description: 'Skip validation?'
+        default: false
+      skip-cypress:
+        required: false
+        type: boolean
+        description: 'Skip cypress?'
+        default: true
+      build-profile:
+        required: false
+        type: string
+        description: 'Profile to build with. "pnpm build:<profile>".'
+        default: ''
+    secrets:
+      READER_TOKEN:
+        required: false
+      SENTRY_AUTH_TOKEN:
+        required: false
+    outputs:
+      image:
+        description: 'Image name'
+        value: ${{ jobs.build-pnpm-app.outputs.image }}
+jobs:
+  build-pnpm-app:
+    name: Build pnpm app
+    permissions:
+      contents: read # nais/docker-build-push
+      id-token: write # nais/docker-build-push
+    runs-on: ${{ inputs.runs-on }}
+    env:
+      TZ: 'Europe/Oslo'
+    outputs:
+      image: ${{ steps.build-push-docker-image.outputs.image }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@fe104658747b27e96e4f7e80cd0a94068e53901d # ratchet:step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # ratchet:actions/checkout@v6
+      - name: Set up node and install pnpm packages
+        uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-pnpm@main # ratchet:exclude
+        with:
+          node-version: ${{ inputs.node-version }}
+          reader-token: ${{ secrets.READER_TOKEN }}
+      - name: pnpm build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_RELEASE: ${{ github.sha }}
+          BUILD_PROFILE: ${{ inputs.build-profile }}
+        run: |
+          if [ -z "$BUILD_PROFILE" ]; then
+            pnpm build
+          else
+            pnpm "build:$BUILD_PROFILE"
+          fi
+      - name: Run validate
+        if: ${{ !inputs.skip-validation }}
+        run: pnpm validate
+      - name: Run tests
+        if: ${{ !inputs.skip-tests }}
+        run: pnpm test
+      - name: Run cypress
+        if: ${{ !inputs.skip-cypress }}
+        run: pnpm cypress
+      - name: Build and push docker image
+        id: build-push-docker-image
+        if: inputs.build-image
+        uses: navikt/familie-baks-gha-workflows/.github/actions/build-push-docker-image@main # ratchet:exclude
+        with:
+          push-image: ${{ inputs.push-image }}
+          image-suffix: ${{ inputs.build-profile }}
+      - name: Display image name
+        if: steps.build-push-docker-image.outputs.image != ''
+        run: |
+          echo "## Image name" >> $GITHUB_STEP_SUMMARY
+          echo "\`${{ steps.build-push-docker-image.outputs.image }}\`" >> $GITHUB_STEP_SUMMARY

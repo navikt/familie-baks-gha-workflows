@@ -1,0 +1,51 @@
+name: Pull request pnpm
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+      node-version:
+        required: true
+        type: string
+        description: 'Which Node version to build app.'
+      skip-cypress:
+        required: false
+        type: boolean
+        description: 'Skip cypress?'
+        default: true
+    secrets:
+      READER_TOKEN:
+        required: false
+      SENTRY_AUTH_TOKEN:
+        required: false
+jobs:
+  pull-request-pnpm:
+    name: Pull request pnpm
+    permissions:
+      contents: read # fetch repo
+    runs-on: ${{ inputs.runs-on }}
+    env:
+      TZ: 'Europe/Oslo'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # ratchet:actions/checkout@v6
+      - name: Set up node and install pnpm packages
+        uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-pnpm@main # ratchet:exclude
+        with:
+          node-version: ${{ inputs.node-version }}
+          reader-token: ${{ secrets.READER_TOKEN }}
+      - name: pnpm build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_RELEASE: ${{ github.sha }}
+        run: pnpm build
+      - name: Run validate
+        run: pnpm validate
+      - name: Run tests
+        run: pnpm test
+      - name: Run cypress
+        if: ${{ !inputs.skip-cypress }}
+        run: pnpm cypress
