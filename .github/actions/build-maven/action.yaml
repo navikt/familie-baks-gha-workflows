@@ -20,17 +20,29 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Compute Maven flags
+      shell: bash
+      env:
+        SKIP_TESTS: ${{ inputs.skip-tests }}
+        MAVEN_PROFILE: ${{ inputs.profile }}
+        WITH_COVERAGE: ${{ inputs.with-coverage }}
+      run: |
+        MAVEN_FLAGS=""
+        [ "$SKIP_TESTS" = "true" ]    && MAVEN_FLAGS="$MAVEN_FLAGS -DskipTests"
+        [ -n "$MAVEN_PROFILE" ]       && MAVEN_FLAGS="$MAVEN_FLAGS -P$MAVEN_PROFILE"
+        [ "$WITH_COVERAGE" = "true" ] && MAVEN_FLAGS="$MAVEN_FLAGS -Pcoverage"
+        echo "MAVEN_FLAGS=${MAVEN_FLAGS# }" >> $GITHUB_ENV
     - name: Maven ${{ inputs.maven-command }}
       shell: bash
       env:
         MAVEN_OPTS: -Xss1024M -Xmx2048M
+        MAVEN_COMMAND: ${{ inputs.maven-command }}
       run: |
-        mvn ${{ inputs.maven-command }} \
+        mvn $MAVEN_COMMAND \
           --settings maven-settings.xml \
           --errors \
           --batch-mode \
           --no-transfer-progress \
           --quiet \
-          ${{ (inputs.skip-tests == 'true' && '-DskipTests') || '-Dsurefire.rerunFailingTestsCount=2' }} \
-          ${{ inputs.profile && format('-P{0}', inputs.profile) || '' }} \
-          ${{ inputs.with-coverage == 'true' && '-Pcoverage' || '' }} \
+          -Dsurefire.rerunFailingTestsCount=2 \
+          $MAVEN_FLAGS

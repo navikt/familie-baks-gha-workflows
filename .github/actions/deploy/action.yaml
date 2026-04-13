@@ -16,11 +16,12 @@ runs:
   steps:
     - name: Set version
       shell: bash
-      run: echo "VERSION=${{ github.event.repository.name }}:${{ github.sha }}" >> $GITHUB_ENV
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+      run: echo "VERSION=$REPO_NAME:${{ github.sha }}" >> $GITHUB_ENV
     - name: Deploy til ${{ inputs.cluster }} fra GAR
       uses: nais/deploy/actions/deploy@fa754451577294aae42872a69b888b3470478ec1 # ratchet:nais/deploy/actions/deploy@v2
       env:
-        PRINT_PAYLOAD: true
         CLUSTER: ${{ inputs.cluster }}
         RESOURCE: ${{ inputs.resource }}
         VAR: image=${{ inputs.image }},VERSION=${{ env.VERSION }}
