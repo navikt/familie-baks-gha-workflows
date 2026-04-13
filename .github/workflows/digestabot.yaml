@@ -36,7 +36,7 @@ jobs:
         with:
           token: ${{ steps.digestabot-token.outputs.token }}
           team: teamfamilie
-          branch-for-pr: 'digestabot'
+          branch-for-pr: 'digestabot-update-digests'
           commit-message: 'Bump Docker image (digestabot)'
           title-for-pr: 'Bump Docker image (digestabot)'
           description-for-pr: 'Bumper Chainguard Docker image til nyeste tilgjengelige versjon.'
