@@ -8,6 +8,7 @@ inputs:
 outputs:
   image-ref:
     value: ${{ inputs.image-ref }}
+    description: 'Combined image name and tag, i.e: local-image:ci'
 runs:
   using: 'composite'
   steps:
