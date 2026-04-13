@@ -11,6 +11,11 @@ on:
         required: true
         type: string
         description: 'Which Node version to build app.'
+      pnpm-version:
+        required: false
+        type: string
+        description: 'Which pnpm version to use.'
+        default: '10'
     secrets:
       READER_TOKEN:
         required: false
@@ -47,6 +52,7 @@ jobs:
         uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-pnpm@main # ratchet:exclude
         with:
           node-version: ${{ inputs.node-version }}
+          pnpm-version: ${{ inputs.pnpm-version }}
           reader-token: ${{ secrets.READER_TOKEN }}
       - name: pnpm build
         run: pnpm build
