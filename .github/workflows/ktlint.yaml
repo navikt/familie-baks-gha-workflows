@@ -30,7 +30,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           java-version: ${{ inputs.java-version }}
       - name: Run ktlint
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn --batch-mode --no-transfer-progress antrun:run@ktlint
