@@ -58,7 +58,7 @@ jobs:
           TESTCONTAINERS_REUSE_ENABLE: true
         with:
           maven-command: 'verify'
-          skip-tests: ${{ inputs.skip-tests }}
+          skip-tests: false
           profile: ${{ inputs.profile }}
           with-coverage: ${{ inputs.with-coverage }}
       - name: Upload code coverage report
