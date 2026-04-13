@@ -8,10 +8,9 @@ on:
         description: 'Which runner image to run the workflow.'
         default: 'ubuntu-latest'
       java-version:
-        required: false
+        required: true
         type: string
         description: 'Which Java SDK version to build app.'
-        default: '21'
       with-coverage:
         required: false
         type: boolean

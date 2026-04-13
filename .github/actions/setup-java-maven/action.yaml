@@ -6,8 +6,7 @@ inputs:
     required: true
   java-version:
     description: 'Java SDK version to use'
-    required: false
-    default: '21'
+    required: true
 runs:
   using: 'composite'
   steps:
