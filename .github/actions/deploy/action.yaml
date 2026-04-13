@@ -18,7 +18,8 @@ runs:
       shell: bash
       env:
         REPO_NAME: ${{ github.event.repository.name }}
-      run: echo "VERSION=$REPO_NAME:${{ github.sha }}" >> $GITHUB_ENV
+        GITHUB_SHA: ${{ github.sha }}
+      run: echo "VERSION=$REPO_NAME:$GITHUB_SHA" >> $GITHUB_ENV
     - name: Deploy til ${{ inputs.cluster }} fra GAR
       uses: nais/deploy/actions/deploy@fa754451577294aae42872a69b888b3470478ec1 # ratchet:nais/deploy/actions/deploy@v2
       env:
