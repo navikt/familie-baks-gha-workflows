@@ -8,10 +8,9 @@ on:
         description: 'Which runner image to run the workflow.'
         default: 'ubuntu-latest'
       java-version:
-        required: false
+        required: true
         type: string
         description: 'Which Java SDK version to build app.'
-        default: '21'
       build-image:
         required: false
         type: boolean
@@ -68,8 +67,10 @@ jobs:
       # This check is actually required for the value to be passed along. The runner seems to "forget" the value if it is not used in a step.
       - name: Check if byosbom exists
         if: ${{ inputs.byosbom != '' }}
+        env:
+          BYOSBOM_PATH: ${{ inputs.byosbom }}
         run: |
-          if [ -s "${{ inputs.byosbom }}" ]; then
+          if [ -s "$BYOSBOM_PATH" ]; then
             echo "SBOM file exists and has content"
           else
             echo "SBOM file not found"

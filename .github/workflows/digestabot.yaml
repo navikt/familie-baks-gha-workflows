@@ -3,7 +3,7 @@ name: Digestabot updates
 on:
   workflow_call:
     inputs:
-      DIGESTABOT_APP_ID:
+      digestabot-app-id:
         required: true
         type: string
     secrets:
@@ -30,13 +30,13 @@ jobs:
         id: digestabot-token
         uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # ratchet:actions/create-github-app-token@v3.0.0
         with:
-          app-id: ${{ inputs.DIGESTABOT_APP_ID }}
+          app-id: ${{ inputs.digestabot-app-id }}
           private-key: ${{ secrets.DIGESTABOT_PRIVATE_KEY }}
       - uses: navikt/digestabot@e4b413f1eed3c97f7fd4ffa1d05204de9944d0a9 # ratchet:navikt/digestabot@v1.1.1
         with:
           token: ${{ steps.digestabot-token.outputs.token }}
           team: teamfamilie
-          branch-for-pr: 'digestabot'
+          branch-for-pr: 'digestabot-update-digests'
           commit-message: 'Bump Docker image (digestabot)'
           title-for-pr: 'Bump Docker image (digestabot)'
           description-for-pr: 'Bumper Chainguard Docker image til nyeste tilgjengelige versjon.'
