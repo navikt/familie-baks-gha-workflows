@@ -39,4 +39,4 @@ jobs:
           branch-for-pr: 'digestabot-update-digests'
           commit-message: 'Bump Docker image (digestabot)'
           title-for-pr: 'Bump Docker image (digestabot)'
-          description-for-pr: 'Bumper Chainguard Docker image til nyeste tilgjengelige versjon. TEST'
+          description-for-pr: 'Bumper Chainguard Docker image til nyeste tilgjengelige versjon.'
