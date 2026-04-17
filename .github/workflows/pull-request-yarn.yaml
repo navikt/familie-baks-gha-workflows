@@ -25,6 +25,7 @@ on:
 jobs:
   pull-request-yarn:
     name: Pull request yarn
+    if: github.actor != 'team-baks-digestabot[bot]'
     permissions:
       contents: read # fetch repo
     runs-on: ${{ inputs.runs-on }}

@@ -24,6 +24,7 @@ on:
 jobs:
   pull-request-pnpm:
     name: Pull request pnpm
+    if: github.actor != 'team-baks-digestabot[bot]'
     permissions:
       contents: read # fetch repo
     runs-on: ${{ inputs.runs-on }}
