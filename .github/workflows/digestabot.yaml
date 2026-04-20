@@ -3,7 +3,7 @@ name: Digestabot updates
 on:
   workflow_call:
     inputs:
-      digestabot-app-id:
+      digestabot-client-id:
         required: true
         type: string
     secrets:
@@ -30,7 +30,7 @@ jobs:
         id: digestabot-token
         uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # ratchet:actions/create-github-app-token@v3.1.1
         with:
-          app-id: ${{ inputs.digestabot-app-id }}
+          client-id: ${{ inputs.digestabot-client-id }}
           private-key: ${{ secrets.DIGESTABOT_PRIVATE_KEY }}
       - uses: navikt/digestabot@e4b413f1eed3c97f7fd4ffa1d05204de9944d0a9 # ratchet:navikt/digestabot@v1.1.1
         with:
