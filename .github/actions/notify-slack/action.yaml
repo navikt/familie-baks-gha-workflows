@@ -1,0 +1,21 @@
+name: Notify Slack
+description: Post a message to a Slack channel via incoming webhook
+
+inputs:
+  message:
+    required: true
+    description: 'The message to post to Slack'
+  slack_webhook:
+    required: true
+    description: 'Slack incoming webhook URL'
+
+runs:
+  using: composite
+  steps:
+    - name: Post message to Slack
+      shell: bash
+      run: |
+        curl -X POST --data "{\"text\": \"$MESSAGE\"}" "SLACK_WEBHOOK"
+      env:
+        MESSAGE: ${{ inputs.message }}
+        SLACK_WEBHOOK: ${{ inputs.slack_webhook }}
