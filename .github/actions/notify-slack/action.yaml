@@ -15,7 +15,7 @@ runs:
     - name: Post message to Slack
       shell: bash
       run: |
-        curl -X POST --data "{\"text\": \"$MESSAGE\"}" "SLACK_WEBHOOK"
+        curl -X POST --data "{\"text\": \"$MESSAGE\"}" "$SLACK_WEBHOOK"
       env:
         MESSAGE: ${{ inputs.message }}
         SLACK_WEBHOOK: ${{ inputs.slack_webhook }}
