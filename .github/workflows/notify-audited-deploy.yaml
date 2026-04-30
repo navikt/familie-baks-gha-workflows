@@ -24,7 +24,7 @@ jobs:
       - name: Post in slack
         uses: navikt/familie-baks-gha-workflows/.github/actions/notify-slack@slack-varsling # ratchet:exclude
         with:
-          message: "${{ github.actor }} har deployet til prod fra branch: ${{ github.ref_name }} i repo: ${{ github.repository }}\n\
+          message: "${{ github.actor }} har deployet til prod fra branch: `${{ github.ref_name }}` i repo: ${{ github.repository }}\n\
             Kommenter det som er gjort og hvorfor.\n\
             Deploy: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           slack_webhook: ${{ secrets.BAKS_AUDIT_ALERTS_SLACK_WEBHOOK }}
