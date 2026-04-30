@@ -22,7 +22,7 @@ jobs:
         with:
           egress-policy: audit
       - name: Post in slack
-        uses: navikt/familie-baks-gha-workflows/.github/actions/notify-slack@slack-varsling # ratchet:exclude
+        uses: navikt/familie-baks-gha-workflows/.github/actions/notify-slack@main # ratchet:exclude
         with:
           message: "${{ github.actor }} har deployet til prod fra branch: `${{ github.ref_name }}` i repo: ${{ github.repository }}\n\
             Kommenter det som er gjort og hvorfor.\n\

@@ -22,7 +22,7 @@ jobs:
         with:
           egress-policy: audit
       - name: Post in slack
-        uses: navikt/familie-baks-gha-workflows/.github/actions/notify-slack@slack-varsling # ratchet:exclude
+        uses: navikt/familie-baks-gha-workflows/.github/actions/notify-slack@main # ratchet:exclude
         with:
           message: "Workflow: `${{ github.workflow }}` feilet for ${{ github.repository }} - ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           slack_webhook: ${{ secrets.BAKS_DEPLOYMENTS_SLACK_WEBHOOK }}
