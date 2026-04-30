@@ -1,0 +1,30 @@
+name: Notify audited deploy
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+    secrets:
+      BAKS_AUDIT_ALERTS_SLACK_WEBHOOK:
+        required: true
+
+jobs:
+  notify-audited-deploy:
+    name: Notify audited deploy
+    runs-on: ${{ inputs.runs-on }}
+    permissions: {}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40 # ratchet:step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+      - name: Post in slack
+        uses: navikt/familie-baks-gha-workflows/.github/actions/notify-slack@main # ratchet:exclude
+        with:
+          message: "${{ github.actor }} har deployet til prod fra branch: `${{ github.ref_name }}` i repo: ${{ github.repository }}\n\
+            Kommenter det som er gjort og hvorfor.\n\
+            Deploy: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          slack_webhook: ${{ secrets.BAKS_AUDIT_ALERTS_SLACK_WEBHOOK }}

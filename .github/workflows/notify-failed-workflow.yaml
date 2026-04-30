@@ -1,0 +1,28 @@
+name: Notify failed workflow
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+    secrets:
+      BAKS_DEPLOYMENTS_SLACK_WEBHOOK:
+        required: true
+
+jobs:
+  notify-failed-workflow:
+    name: Notify failed workflow
+    runs-on: ${{ inputs.runs-on }}
+    permissions: {}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40 # ratchet:step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+      - name: Post in slack
+        uses: navikt/familie-baks-gha-workflows/.github/actions/notify-slack@main # ratchet:exclude
+        with:
+          message: "Workflow: `${{ github.workflow }}` feilet for ${{ github.repository }} - ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          slack_webhook: ${{ secrets.BAKS_DEPLOYMENTS_SLACK_WEBHOOK }}
