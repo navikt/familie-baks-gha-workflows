@@ -2,6 +2,10 @@ name: Manual deploy
 on:
   workflow_call:
     inputs:
+      image-name:
+        required: false
+        type: string
+        description: 'Image name, defaults to repo name. Used for environment-specific images'
       image-tag:
         required: true
         type: string
@@ -21,7 +25,9 @@ on:
         default: 'ubuntu-latest'
 
 env:
-  IMAGE_PATH: europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/${{ github.event.repository.name }}
+  IMAGE_REGISTRY: europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie
+  IMAGE_NAME: ${{ inputs.image-name || github.event.repository.name }}
+  IMAGE_TAG: ${{ inputs.image-tag }}
 
 jobs:
   manual-deploy:
@@ -41,4 +47,4 @@ jobs:
         with:
           cluster: ${{ inputs.cluster }}
           resource: ${{ inputs.resource }}
-          image: ${{ env.IMAGE_PATH }}:${{ inputs.image-tag }}
+          image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
