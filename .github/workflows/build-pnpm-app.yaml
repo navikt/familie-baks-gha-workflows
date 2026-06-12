@@ -67,7 +67,7 @@ jobs:
         with:
           egress-policy: audit
       - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # ratchet:actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # ratchet:actions/checkout@v6
       - name: Set up node and install pnpm packages
         uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-pnpm@main # ratchet:exclude
         with:
