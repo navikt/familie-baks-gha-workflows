@@ -48,3 +48,6 @@ jobs:
           cluster: ${{ inputs.cluster }}
           resource: ${{ inputs.resource }}
           image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          # Imaget deployes fra en vilkårlig tag og er ikke nødvendigvis bygget fra
+          # ref-en som trigget dette deployet, så vi kan ikke utlede branchen.
+          branch: ukjent

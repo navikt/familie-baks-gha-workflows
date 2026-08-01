@@ -10,6 +10,10 @@ inputs:
   resource:
     required: true
     description: 'The path to the nais (yaml) resource file to use'
+  branch:
+    required: false
+    default: ''
+    description: 'Branchen imaget er bygget fra. Utledes fra github.ref_name hvis den ikke oppgis. Sett til "ukjent" når imaget ikke er bygget fra ref-en som trigget deployet.'
 
 runs:
   using: 'composite'
@@ -20,9 +24,10 @@ runs:
         REPO_NAME: ${{ github.event.repository.name }}
         GITHUB_SHA: ${{ github.sha }}
         GITHUB_REF_NAME: ${{ github.ref_name }}
+        BRANCH_INPUT: ${{ inputs.branch }}
       run: |
         echo "VERSION=$REPO_NAME:$GITHUB_SHA" >> $GITHUB_ENV
-        echo "BRANCH=$GITHUB_REF_NAME" >> $GITHUB_ENV
+        echo "BRANCH=${BRANCH_INPUT:-$GITHUB_REF_NAME}" >> $GITHUB_ENV
     - name: Deploy til ${{ inputs.cluster }} fra GAR
       uses: nais/deploy/actions/deploy@fa754451577294aae42872a69b888b3470478ec1 # ratchet:nais/deploy/actions/deploy@v2
       env:
