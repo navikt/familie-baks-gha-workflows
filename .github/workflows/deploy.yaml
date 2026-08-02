@@ -34,8 +34,7 @@ jobs:
           egress-policy: audit
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # ratchet:actions/checkout@v7.0.1
       - name: Deploy to ${{ inputs.cluster }} from GAR
-        # TODO NAV-22519: sett tilbake til @main før merge
-        uses: navikt/familie-baks-gha-workflows/.github/actions/deploy@NAV-22519_eksponer_deployet_branch # ratchet:exclude
+        uses: navikt/familie-baks-gha-workflows/.github/actions/deploy@main # ratchet:exclude
         with:
           cluster: ${{ inputs.cluster }}
           resource: ${{ inputs.resource }}
