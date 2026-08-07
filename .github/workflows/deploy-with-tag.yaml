@@ -48,3 +48,7 @@ jobs:
           cluster: ${{ inputs.cluster }}
           resource: ${{ inputs.resource }}
           image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          # Imaget deployes fra en vilkårlig tag og er ikke nødvendigvis bygget fra
+          # ref-en som trigget dette deployet, så vi kan ikke utlede branchen.
+          # Tag-en er mer informativ enn ingenting, og er sporbar tilbake til commit.
+          branch: "tag:${{ inputs.image-tag }}"
