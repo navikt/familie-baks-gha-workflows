@@ -44,8 +44,6 @@ on:
     secrets:
       READER_TOKEN:
         required: false
-      SENTRY_AUTH_TOKEN:
-        required: false
     outputs:
       image:
         description: 'Image name'
@@ -75,8 +73,6 @@ jobs:
           reader-token: ${{ secrets.READER_TOKEN }}
       - name: pnpm build
         env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_RELEASE: ${{ github.sha }}
           BUILD_PROFILE: ${{ inputs.build-profile }}
         run: |
           if [ -z "$BUILD_PROFILE" ]; then

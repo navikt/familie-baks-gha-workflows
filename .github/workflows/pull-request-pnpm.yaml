@@ -19,8 +19,6 @@ on:
     secrets:
       READER_TOKEN:
         required: false
-      SENTRY_AUTH_TOKEN:
-        required: false
 jobs:
   pull-request-pnpm:
     name: Pull request pnpm
@@ -43,9 +41,6 @@ jobs:
           node-version: ${{ inputs.node-version }}
           reader-token: ${{ secrets.READER_TOKEN }}
       - name: pnpm build
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_RELEASE: ${{ github.sha }}
         run: pnpm build
       - name: Run validate
         run: pnpm validate
