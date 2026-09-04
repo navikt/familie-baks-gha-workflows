@@ -20,8 +20,6 @@ on:
     secrets:
       READER_TOKEN:
         required: false
-      SENTRY_AUTH_TOKEN:
-        required: false
 jobs:
   pull-request-yarn:
     name: Pull request yarn
@@ -44,9 +42,6 @@ jobs:
           node-version: ${{ inputs.node-version }}
           reader-token: ${{ secrets.READER_TOKEN }}
       - name: Yarn build
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_RELEASE: ${{ github.sha }}
         run: yarn build
       - name: Run validate
         run: yarn validate
