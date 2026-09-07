@@ -71,13 +71,10 @@ europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/<repo-name>
 | Workflow | Purpose |
 |---|---|
 | `build-maven-app.yaml` | Build + optionally push Maven/Kotlin Docker image |
-| `build-yarn-app.yaml` | Build + optionally push Yarn/Node Docker image |
 | `pull-request-maven.yaml` | Run Maven verify on PRs, optionally upload coverage |
-| `pull-request-yarn.yaml` | Run Yarn build/test on PRs |
 | `deploy.yaml` | Deploy a specific image to a Nais cluster |
 | `deploy-with-tag.yaml` | Manual deploy by image tag (constructs full path from repo name) |
 | `scan-vulnerabilities-maven.yaml` | CodeQL + Trivy scan for Maven apps |
-| `scan-vulnerabilities-yarn.yaml` | CodeQL + Trivy scan for Yarn apps |
 | `sonar.yaml` | Sonar analysis, expects coverage artifacts from prior jobs |
 | `ktlint.yaml` | Kotlin linting via Maven `antrun:run@ktlint` |
 | `notify-slack.yaml` | Post failure notification to Slack via webhook |
