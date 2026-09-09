@@ -1,0 +1,27 @@
+name: Zizmor self scan
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/**']
+  pull_request:
+    paths: ['.github/**']
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  # Avbryter kun PR-kjøringer. På main ville en avbrutt kjøring latt være å laste
+  # opp SARIF, og alerts hadde blitt stående utdatert til neste trigger.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  zizmor:
+    uses: ./.github/workflows/zizmor.yaml
+    permissions:
+      security-events: write # laste opp SARIF til code scanning
+      contents: read # sjekke ut koden som skal scannes
+      actions: read # kreves av upload-sarif i private repoer
