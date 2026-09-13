@@ -1,0 +1,19 @@
+# Konfig for zizmor (statisk analyse av GitHub Actions-workflows) — NAV-30224.
+# Unntak skal alltid ha en begrunnelse her.
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        # Delte workflows og actions i dette repoet refereres bevisst med @main (ratchet:exclude):
+        # main her er tillitsgrensen, og callerne skal plukke opp forbedringer uten PR i hvert repo.
+        # Mønsteret må ha /* for å matche subpaths (owner/repo alene matcher ikke).
+        "navikt/familie-baks-gha-workflows/*": ref-pin
+        # Alt annet krever SHA-pinning.
+        "*": hash-pin
+  ref-version-mismatch:
+    # Midlertidig avskrudd: mange eksisterende ratchet-kommentarer bruker major-tags
+    # (f.eks. # ratchet:actions/checkout@v4) som aldri matcher en eksakt SHA, så audit-en
+    # gir mest støy akkurat nå. Oppfølging: normaliser kommentarene til eksakte versjoner
+    # og skru den på igjen — den fanger tuklede pins der kommentaren later som SHA-en er
+    # en kjent versjon. Selve SHA-pinningen håndheves uansett av unpinned-uses over.
+    disable: true

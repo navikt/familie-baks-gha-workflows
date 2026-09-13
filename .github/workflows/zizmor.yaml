@@ -1,0 +1,118 @@
+name: Zizmor
+
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+      fail-on-findings:
+        required: false
+        type: boolean
+        description: 'Fail the job when zizmor finds issues. Default false: findings only go to the Security tab.'
+        default: false
+      fail-on-severity:
+        required: false
+        type: string
+        description: 'Lowest SARIF level that blocks when fail-on-findings is true: error, warning or note. zizmor maps High to error, Medium to warning and Informational to note.'
+        default: 'error'
+
+permissions: {}
+
+jobs:
+  zizmor:
+    name: Zizmor
+    runs-on: ${{ inputs.runs-on }}
+    timeout-minutes: 10
+    permissions:
+      security-events: write # laste opp SARIF til code scanning
+      contents: read # sjekke ut koden som skal scannes
+      actions: read # kreves av upload-sarif i private repoer
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # ratchet:step-security/harden-runner@v2.20.1
+        with:
+          # Lista er hentet fra harden-runner sin audit-logg (run 33423018553) og dekker checkout,
+          # setup-uv, uvx zizmor og upload-sarif. GitHub Actions sin egen infrastruktur
+          # (*.actions.githubusercontent.com, productionresultssa*.blob.core.windows.net) er
+          # implisitt tillatt av agenten og skal ikke listes her.
+          egress-policy: block
+          disable-sudo-and-containers: true
+          allowed-endpoints: >
+            github.com:443
+            api.github.com:443
+            raw.githubusercontent.com:443
+            releases.astral.sh:443
+            pypi.org:443
+            files.pythonhosted.org:443
+      - name: Validate input
+        id: config
+        # Valideres før scanningen, så en skrivefeil feiler på sekunder i stedet for
+        # etter en ferdig kjøring og opplastet SARIF.
+        env:
+          FAIL_ON_SEVERITY: ${{ inputs.fail-on-severity }}
+        run: |
+          case "$FAIL_ON_SEVERITY" in
+            error)   nivaaer='["error"]' ;;
+            warning) nivaaer='["error","warning"]' ;;
+            note)    nivaaer='["error","warning","note"]' ;;
+            *) echo "::error::Ugyldig fail-on-severity: '$FAIL_ON_SEVERITY' (gyldige: error, warning, note)."; exit 1 ;;
+          esac
+          echo "nivaaer=$nivaaer" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # ratchet:actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # ratchet:astral-sh/setup-uv@v10.0.1
+        with:
+          # Repoene har ingen Python-avhengigheter, så cachen ville aldri blitt invalidert.
+          enable-cache: false
+      - name: Run zizmor
+        # Versjonen er pinnet her for hele fleeten — bump den bevisst med én endring i dette repoet.
+        # --format=sarif gjør at funn ikke setter exit-kode (håndteres i eget steg under),
+        # så exit != 0 betyr at zizmor selv feilet (ugyldig konfig, crash) og skal feile jobben.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: uvx zizmor==1.29.0 --format=sarif . > results.sarif
+      - name: Upload SARIF file
+        id: upload
+        # PR-er fra forks har read-only GITHUB_TOKEN og kan ikke laste opp SARIF.
+        if: ${{ github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork }}
+        uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # ratchet:github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: results.sarif
+          category: zizmor
+      - name: Summarize findings
+        # Kjører alltid når selve scanningen gikk bra, slik at funn er synlige i
+        # jobb-oppsummeringen også når SARIF-opplastingen hoppes over (fork-PR-er).
+        # zizmor setter aldri exit-kode ved funn når formatet er SARIF, så blokkerende
+        # modus må leses ut av resultatfilen.
+        env:
+          FAIL_ON_FINDINGS: ${{ inputs.fail-on-findings }}
+          FAIL_ON_SEVERITY: ${{ inputs.fail-on-severity }}
+          NIVAAER: ${{ steps.config.outputs.nivaaer }}
+          UPLOAD_OUTCOME: ${{ steps.upload.outcome }}
+        run: |
+          totalt=$(jq '[.runs[]?.results[]?] | length' results.sarif)
+          blokkerende=$(jq --argjson n "$NIVAAER" \
+            '[.runs[]?.results[]? | select(.level as $l | $n | index($l))] | length' results.sarif)
+          {
+            echo "### zizmor"
+            echo "$totalt funn totalt, $blokkerende på nivå \`$FAIL_ON_SEVERITY\` eller høyere."
+            if [ "$UPLOAD_OUTCOME" = "skipped" ]; then
+              echo ""
+              echo "> SARIF ble ikke lastet opp (fork-PR har read-only token), så funnene finnes kun her."
+            fi
+            if [ "$totalt" -gt 0 ]; then
+              echo ""
+              echo "| Regel | Antall |"
+              echo "| --- | --- |"
+              jq -r '[.runs[]?.results[]?.ruleId] | group_by(.) | map("| \(.[0]) | \(length) |") | .[]' results.sarif
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$FAIL_ON_FINDINGS" = "true" ] && [ "$blokkerende" -gt 0 ]; then
+            echo "::error::zizmor fant $blokkerende funn på nivå $FAIL_ON_SEVERITY eller høyere - se Security-fanen (code scanning)."
+            exit 1
+          fi
