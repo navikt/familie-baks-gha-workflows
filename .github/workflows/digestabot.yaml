@@ -32,6 +32,8 @@ jobs:
         with:
           client-id: ${{ inputs.digestabot-client-id }}
           private-key: ${{ secrets.DIGESTABOT_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
       - uses: navikt/digestabot@3302a753e533ceb9ec216de7f78345436cd636e3 # ratchet:navikt/digestabot@v1.2
         with:
           token: ${{ steps.digestabot-token.outputs.token }}
