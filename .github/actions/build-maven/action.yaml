@@ -21,6 +21,7 @@ runs:
   using: 'composite'
   steps:
     - name: Compute Maven flags
+      id: maven-flags
       shell: bash
       env:
         SKIP_TESTS: ${{ inputs.skip-tests }}
@@ -31,12 +32,13 @@ runs:
         [ "$SKIP_TESTS" = "true" ]    && MAVEN_FLAGS="$MAVEN_FLAGS -DskipTests"
         [ -n "$MAVEN_PROFILE" ]       && MAVEN_FLAGS="$MAVEN_FLAGS -P$MAVEN_PROFILE"
         [ "$WITH_COVERAGE" = "true" ] && MAVEN_FLAGS="$MAVEN_FLAGS -Pcoverage"
-        echo "MAVEN_FLAGS=${MAVEN_FLAGS# }" >> $GITHUB_ENV
+        echo "flags=${MAVEN_FLAGS# }" >> "$GITHUB_OUTPUT"
     - name: Maven ${{ inputs.maven-command }}
       shell: bash
       env:
         MAVEN_OPTS: -Xss1024M -Xmx2048M
         MAVEN_COMMAND: ${{ inputs.maven-command }}
+        MAVEN_FLAGS: ${{ steps.maven-flags.outputs.flags }}
       run: |
         mvn $MAVEN_COMMAND \
           --settings maven-settings.xml \

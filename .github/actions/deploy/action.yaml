@@ -19,6 +19,7 @@ runs:
   using: 'composite'
   steps:
     - name: Define env variables
+      id: vars
       shell: bash
       env:
         REPO_NAME: ${{ github.event.repository.name }}
@@ -26,11 +27,11 @@ runs:
         GITHUB_REF_NAME: ${{ github.ref_name }}
         BRANCH_INPUT: ${{ inputs.branch }}
       run: |
-        echo "VERSION=$REPO_NAME:$GITHUB_SHA" >> $GITHUB_ENV
-        echo "BRANCH=${BRANCH_INPUT:-$GITHUB_REF_NAME}" >> $GITHUB_ENV
+        echo "version=$REPO_NAME:$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+        echo "branch=${BRANCH_INPUT:-$GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
     - name: Deploy til ${{ inputs.cluster }} fra GAR
       uses: nais/deploy/actions/deploy@fa754451577294aae42872a69b888b3470478ec1 # ratchet:nais/deploy/actions/deploy@v2
       env:
         CLUSTER: ${{ inputs.cluster }}
         RESOURCE: ${{ inputs.resource }}
-        VAR: image=${{ inputs.image }},VERSION=${{ env.VERSION }},BRANCH=${{ env.BRANCH }}
+        VAR: image=${{ inputs.image }},VERSION=${{ steps.vars.outputs.version }},BRANCH=${{ steps.vars.outputs.branch }}
