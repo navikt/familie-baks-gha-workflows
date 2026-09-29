@@ -104,6 +104,8 @@ jobs:
           image-suffix: ${{ inputs.build-profile }}
       - name: Print image in summary
         if: steps.build-push-docker-image.outputs.image != ''
+        env:
+          IMAGE: ${{ steps.build-push-docker-image.outputs.image }}
         run: |
-          echo "## Image" >> $GITHUB_STEP_SUMMARY
-          echo "\`${{ steps.build-push-docker-image.outputs.image }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "## Image" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`$IMAGE\`" >> "$GITHUB_STEP_SUMMARY"
