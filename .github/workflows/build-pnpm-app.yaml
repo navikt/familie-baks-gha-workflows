@@ -41,10 +41,10 @@ on:
         type: string
         description: 'Profile to build with. "pnpm build:<profile>".'
         default: ''
-      cdn-miljo:
+      cdn-kilde:
         required: false
         type: string
-        description: 'Miljø for CDN-opplasting av dist_frontend/assets (dev eller prod). Tom verdi deaktiverer opplasting.'
+        description: 'Mappe med byggede frontend-filer som lastes opp til cdn.nav.no/teamfamilie/<repo>/. Tom verdi deaktiverer opplasting.'
         default: ''
     secrets:
       READER_TOKEN:
@@ -85,7 +85,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_RELEASE: ${{ github.sha }}
           BUILD_PROFILE: ${{ inputs.build-profile }}
-          CDN_BASE_URL: ${{ inputs.cdn-miljo != '' && format('https://cdn.nav.no/teamfamilie/{0}/{1}/', github.event.repository.name, inputs.cdn-miljo) || '' }}
+          CDN_BASE_URL: ${{ inputs.cdn-kilde != '' && format('https://cdn.nav.no/teamfamilie/{0}/', github.event.repository.name) || '' }}
         run: |
           if [ -z "$BUILD_PROFILE" ]; then
             pnpm build
@@ -102,12 +102,12 @@ jobs:
         if: ${{ !inputs.skip-cypress }}
         run: pnpm cypress
       - name: Last opp frontend til CDN
-        if: inputs.cdn-miljo != ''
+        if: inputs.cdn-kilde != ''
         uses: nais/deploy/actions/cdn-upload/v2@7ad7c2b833e1db74a80954e3ee6bb6ac060a8ae7
         with:
           team: teamfamilie
-          source: dist_frontend/assets
-          destination: /${{ github.event.repository.name }}/${{ inputs.cdn-miljo }}
+          source: ${{ inputs.cdn-kilde }}
+          destination: /${{ github.event.repository.name }}
       - name: Build and push docker image
         id: build-push-docker-image
         if: inputs.build-image
