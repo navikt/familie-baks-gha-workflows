@@ -79,6 +79,7 @@ europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/<repo-name>
 | `ktlint.yaml` | Kotlin linting via Maven `antrun:run@ktlint` |
 | `notify-slack.yaml` | Post failure notification to Slack via webhook |
 | `digestabot.yaml` | Auto-bump Chainguard Docker image SHAs |
+| `cleanup-pr-caches.yaml` | Delete Actions caches from a closed PR and its merge queue runs (see README) |
 | `zizmor.yaml` | zizmor static analysis of GitHub Actions workflows, SARIF to code scanning + job summary (see README) |
 | `zizmor-self-scan.yaml` | Local caller that runs `zizmor.yaml` on this repo itself |
 
