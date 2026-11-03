@@ -46,6 +46,11 @@ on:
         type: string
         description: 'Mappe med byggede frontend-filer som lastes opp til cdn.nav.no/teamfamilie/<repo>/. Tom verdi deaktiverer opplasting.'
         default: ''
+      team:
+        required: false
+        type: string
+        description: 'Nais-team som eier imaget'
+        default: 'teamfamilie'
     secrets:
       READER_TOKEN:
         required: false
@@ -115,6 +120,7 @@ jobs:
         with:
           push-image: ${{ inputs.push-image }}
           image-suffix: ${{ inputs.build-profile }}
+          team: ${{ inputs.team }}
       - name: Print image in summary
         if: steps.build-push-docker-image.outputs.image != ''
         env:
