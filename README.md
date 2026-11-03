@@ -88,5 +88,31 @@ zizmor setter aldri exit-kode ved funn i SARIF-modus, så blokkerende modus lese
 resultatfila i et eget steg. Exit-kode ≠ 0 fra selve scanningen betyr at zizmor feilet
 (ugyldig konfig, crash) og feiler jobben uansett.
 
+# Rydde cacher fra lukkede PR-er
+
+Cacher lagret fra en PR (`refs/pull/<nr>/merge`) eller merge queue
+(`refs/heads/gh-readonly-queue/...`) kan bare gjenbrukes av samme PR, men teller mot repoets
+cache-grense på 10 GB til de blir kastet etter 7 dager. Når grensen nås, kaster GitHub
+cachene som har stått lengst ubrukt, også de på main. `cleanup-pr-caches.yaml` sletter
+cachene til en PR når den lukkes.
+
+Legg til `.github/workflows/cleanup-pr-caches.yaml`:
+
+```yaml
+name: Cleanup PR caches
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions: {}
+
+jobs:
+  cleanup-pr-caches:
+    uses: navikt/familie-baks-gha-workflows/.github/workflows/cleanup-pr-caches.yaml@main # ratchet:exclude
+    permissions:
+      actions: write # slette cacher
+```
+
 # Kontaktinformasjon
 For NAV-interne kan henvendelser rettes til #team-familie på slack. Ellers kan man opprette et issue her på github.

@@ -46,12 +46,23 @@ runs:
           </activeProfiles>
         </settings>
         EOF
-    - name: Set up JDK-${{ inputs.java-version }} with cache
+    - name: Set up JDK-${{ inputs.java-version }}
       uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # ratchet:actions/setup-java@v5
       with:
         java-version: ${{ inputs.java-version }}
         distribution: 'temurin'
-        cache: 'maven'
+    # setup-java sin innebygde cache mangler restore-keys, så hver pom-endring ga full nedlasting.
+    # Måneden i nøkkelen gir en ny cache hver måned, så gamle artefakter ikke hoper seg opp.
+    - name: Finn cache-periode
+      id: cache-periode
+      shell: bash
+      run: echo "maaned=$(date -u +%Y-%m)" >> "$GITHUB_OUTPUT"
+    - name: Cache Maven-avhengigheter
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # ratchet:actions/cache@v6.1.0
+      with:
+        path: ~/.m2/repository
+        key: maven-${{ runner.os }}-${{ steps.cache-periode.outputs.maaned }}-${{ hashFiles('**/pom.xml') }}
+        restore-keys: maven-${{ runner.os }}-${{ steps.cache-periode.outputs.maaned }}-
     - name: Set up Maven
       uses: stCarolas/setup-maven@d6af6abeda15e98926a57b5aa970a96bb37f97d1 # ratchet:stCarolas/setup-maven@v5
       with:

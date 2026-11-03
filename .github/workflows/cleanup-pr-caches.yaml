@@ -1,0 +1,40 @@
+name: Cleanup PR caches
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        description: 'Which runner image to run the workflow.'
+        default: 'ubuntu-latest'
+
+jobs:
+  cleanup-pr-caches:
+    name: Cleanup PR caches
+    if: github.event_name == 'pull_request'
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      actions: write # slette cacher
+    env:
+      TZ: 'Europe/Oslo'
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # ratchet:step-security/harden-runner@v2.20.1
+        with:
+          egress-policy: audit
+      # Cacher fra PR-en og merge queue kan ikke gjenbrukes etter at PR-en er lukket,
+      # men tar plass fra main sine cacher til de blir kastet etter 7 dager.
+      - name: Slett cacher fra PR og merge queue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_REF: refs/pull/${{ github.event.pull_request.number }}/merge
+          MERGE_QUEUE_REF_PREFIX: refs/heads/gh-readonly-queue/${{ github.event.pull_request.base.ref }}/pr-${{ github.event.pull_request.number }}-
+        run: |
+          gh cache list --limit 1000 --json id,ref --jq '.[] | "\(.id) \(.ref)"' |
+            while read -r id ref; do
+              if [[ "$ref" == "$PR_REF" || "$ref" == "$MERGE_QUEUE_REF_PREFIX"* ]]; then
+                echo "Sletter cache $id ($ref)"
+                gh cache delete "$id" || echo "::warning::Klarte ikke å slette cache $id ($ref)"
+              fi
+            done
