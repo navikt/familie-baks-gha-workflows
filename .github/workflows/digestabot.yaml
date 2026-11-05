@@ -6,6 +6,11 @@ on:
       digestabot-client-id:
         required: true
         type: string
+      team:
+        required: false
+        type: string
+        description: 'Team to use for Digestabot (teamfamilie or gravferd).'
+        default: 'teamfamilie'
     secrets:
       DIGESTABOT_PRIVATE_KEY:
         required: true
@@ -37,7 +42,7 @@ jobs:
       - uses: navikt/digestabot@3302a753e533ceb9ec216de7f78345436cd636e3 # ratchet:navikt/digestabot@v1.2
         with:
           token: ${{ steps.digestabot-token.outputs.token }}
-          team: teamfamilie
+          team: ${{ inputs.team }}
           branch-for-pr: 'digestabot-update-digests'
           commit-message: 'Bump Docker image (digestabot)'
           title-for-pr: 'Bump Docker image (digestabot)'

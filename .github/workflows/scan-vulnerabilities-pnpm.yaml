@@ -11,6 +11,11 @@ on:
         required: true
         type: string
         description: 'Which Node version to build app.'
+      team:
+        required: false
+        type: string
+        description: 'Team to use for Nais login (teamfamilie or gravferd).'
+        default: 'teamfamilie'
     secrets:
       READER_TOKEN:
         required: false
@@ -32,7 +37,7 @@ jobs:
       - name: Nais login
         uses: nais/login@40b72a35a18ddf2ad74b632461139ab838cc2a2f # ratchet:nais/login@v0
         with:
-          team: teamfamilie
+          team: ${{ inputs.team }}
       # CodeQL scan
       - name: Initialize CodeQL
         uses: github/codeql-action/init@ff2f1c621b7f889edc0d3c761ac2e6a3f8cdb0dd # ratchet:github/codeql-action/init@v4

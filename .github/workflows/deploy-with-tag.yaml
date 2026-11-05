@@ -23,9 +23,14 @@ on:
         type: string
         description: 'Which runner image to run the workflow.'
         default: 'ubuntu-latest'
+      team:
+        required: false
+        type: string
+        description: 'Team that owns the image (teamfamilie or gravferd).'
+        default: 'teamfamilie'
 
 env:
-  IMAGE_REGISTRY: europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie
+  IMAGE_REGISTRY: europe-north1-docker.pkg.dev/nais-management-233d/${{ inputs.team }}
   IMAGE_NAME: ${{ inputs.image-name || github.event.repository.name }}
   IMAGE_TAG: ${{ inputs.image-tag }}
 
