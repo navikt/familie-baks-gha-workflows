@@ -61,7 +61,7 @@ permissions:
 
 **Image registry** for all team apps:
 ```
-europe-north1-docker.pkg.dev/nais-management-233d/teamfamilie/<repo-name>
+europe-north1-docker.pkg.dev/nais-management-233d/<team>/<repo-name>
 ```
 
 **Nais clusters**: `dev-fss`, `dev-gcp`, `prod-fss`, `prod-gcp`
