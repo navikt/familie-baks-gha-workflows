@@ -73,7 +73,7 @@ jobs:
       image: ${{ steps.build-push-docker-image.outputs.image }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # ratchet:step-security/harden-runner@v2.20.1
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # ratchet:step-security/harden-runner@v2.22.3
         with:
           egress-policy: audit
       - name: Checkout code
@@ -108,7 +108,7 @@ jobs:
         run: pnpm cypress
       - name: Last opp frontend til CDN
         if: inputs.cdn-kilde != ''
-        uses: nais/deploy/actions/cdn-upload/v2@7ad7c2b833e1db74a80954e3ee6bb6ac060a8ae7
+        uses: nais/deploy/actions/cdn-upload/v2@7b60caaded00332e9aa117a8342daa0876851dfe
         with:
           team: ${{ inputs.team }}
           source: ${{ inputs.cdn-kilde }}
