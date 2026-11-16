@@ -32,7 +32,7 @@ jobs:
       actions: read # kreves av upload-sarif i private repoer
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # ratchet:step-security/harden-runner@v2.20.1
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # ratchet:step-security/harden-runner@v2.22.3
         with:
           # Lista er hentet fra harden-runner sin audit-logg (run 33423018553) og dekker checkout,
           # setup-uv, uvx zizmor og upload-sarif. GitHub Actions sin egen infrastruktur
@@ -65,7 +65,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install uv
-        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # ratchet:astral-sh/setup-uv@v10.0.1
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # ratchet:astral-sh/setup-uv@v10.3.3
         with:
           # Repoene har ingen Python-avhengigheter, så cachen ville aldri blitt invalidert.
           enable-cache: false
@@ -80,7 +80,7 @@ jobs:
         id: upload
         # PR-er fra forks har read-only GITHUB_TOKEN og kan ikke laste opp SARIF.
         if: ${{ github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork }}
-        uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # ratchet:github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # ratchet:github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results.sarif
           category: zizmor
